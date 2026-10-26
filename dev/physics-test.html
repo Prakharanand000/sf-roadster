@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Physics Test Bench</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #9cc3e6; font-family: system-ui, Segoe UI, sans-serif; }
+  canvas { display: block; }
+  #hud { position: fixed; left: 10px; top: 10px; width: 270px; background: rgba(10, 14, 22, 0.78); color: #e8eef7; padding: 10px 12px; border-radius: 8px; font-size: 12px; line-height: 1.45; pointer-events: none; }
+  #hud .big { font-size: 30px; font-weight: 700; letter-spacing: 0.5px; }
+  #hud .row { display: flex; justify-content: space-between; }
+  .bar { height: 7px; background: #2a3242; border-radius: 4px; overflow: hidden; margin: 2px 0 5px; }
+  .bar > div { height: 100%; width: 0; background: #4fc3f7; }
+  #rpm > div { background: linear-gradient(90deg, #66bb6a, #ffca28 75%, #ef5350); }
+  #slip > div { background: #ff7043; }
+  #fuel > div { background: #26c6da; }
+  #log { margin-top: 6px; color: #ffd180; min-height: 4.5em; white-space: pre; font-size: 11px; }
+  #tune { position: fixed; right: 10px; top: 10px; width: 250px; max-height: calc(100% - 20px); overflow: auto; background: rgba(10, 14, 22, 0.78); color: #e8eef7; padding: 8px 10px; border-radius: 8px; font-size: 11px; }
+  #tune label { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin: 2px 0; }
+  #tune input[type=range] { width: 110px; }
+  #tune h3 { margin: 4px 0 6px; font-size: 12px; }
+  #help { position: fixed; left: 10px; bottom: 10px; background: rgba(10, 14, 22, 0.7); color: #cfd8e3; padding: 6px 10px; border-radius: 6px; font-size: 11px; line-height: 1.5; }
+  @media (max-width: 700px) { #tune { display: none; } #help { display: none; } }
+</style>
+<script type="importmap">{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+</head>
+<body>
+<div id="hud">
+  <div class="row"><span class="big" id="spd">0</span><span>km/h &nbsp; gear <b id="gear">1</b></span></div>
+  rpm<div class="bar" id="rpm"><div></div></div>
+  slip <span id="slipv"></span><div class="bar" id="slip"><div></div></div>
+  thruster fuel<div class="bar" id="fuel"><div></div></div>
+  <div id="info"></div>
+  <div id="log"></div>
+</div>
+<div id="tune"><h3>Tuning (PHYS knobs, live)</h3><div id="knobs"></div></div>
+<div id="help">
+  W/S or arrows: throttle / brake-reverse &middot; A/D steer &middot; Space handbrake &middot; Shift boost &middot; E hop (hold in air = hover)<br>
+  R reset upright &middot; C camera &middot; 1-3 car &middot; T traffic &middot; I AI rivals &middot; teleport: 4 plaza, 5 hill street, 6 runway, 7 roof approach, 8 ring, 9 twisty, 0 bay
+</div>
+<script type="module">
+import * as THREE from 'three';
+import { Vehicle, PHYS, resolveVehicleCollisions } from '../src/physics/vehicle.js';
+import { AIDriver } from '../src/physics/ai.js';
+import { Traffic } from '../src/physics/traffic.js';
+import { createMockWorld, MOCK } from '../src/physics/mockWorld.js';
+import { SAMPLE_SPECS, createMockCarModel, createMockTrafficCarModel } from '../src/physics/mockCar.js';
+
+const world = createMockWorld();
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#9cc3e6');
+scene.fog = new THREE.Fog('#9cc3e6', 300, 1600);
+const camera = new THREE.PerspectiveCamera(65, innerWidth / innerHeight, 0.3, 5000);
+scene.add(new THREE.HemisphereLight('#dfefff', '#4b5a3a', 1.1));
+const sun = new THREE.DirectionalLight('#fff4e0', 1.6); sun.position.set(300, 600, 200); scene.add(sun);
+
+// ---------- terrain
+const SURF_COL = { road: '#4a4d52', sidewalk: '#9a9a96', grass: '#5d8a46', sand: '#d8c78f', water: '#2d5d86', roof: '#777', bridge: '#888' };
+function terrainMesh(x0, x1, z0, z1, step, sinkHill) {
+  const nx = Math.round((x1 - x0) / step), nz = Math.round((z1 - z0) / step);
+  const g = new THREE.PlaneGeometry(x1 - x0, z1 - z0, nx, nz);
+  g.rotateX(-Math.PI / 2);
+  g.translate((x0 + x1) / 2, 0, (z0 + z1) / 2);
+  const pos = g.attributes.position, col = new Float32Array(pos.count * 3), c = new THREE.Color();
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i), z = pos.getZ(i);
+    let h = world.heightAt(x, z);
+    if (sinkHill && Math.abs(x - MOCK.HILL_X) < 92 && Math.abs(z) < 795) h -= 4;
+    pos.setY(i, h);
+    const s = world.surfaceAt(x, z, h);
+    c.set(SURF_COL[s] || '#5d8a46');
+    const shade = 0.9 + 0.1 * Math.sin(x * 0.05) * Math.cos(z * 0.05);
+    col[i * 3] = c.r * shade; col[i * 3 + 1] = c.g * shade; col[i * 3 + 2] = c.b * shade;
+  }
+  g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  g.computeVertexNormals();
+  return new THREE.Mesh(g, new THREE.MeshLambertMaterial({ vertexColors: true }));
+}
+const b = world.bounds;
+scene.add(terrainMesh(b.minX, b.maxX, b.minZ, b.maxZ, 8, true));
+scene.add(terrainMesh(MOCK.HILL_X - 95, MOCK.HILL_X + 95, -800, 800, 2, false));
+// grid lines on the plaza for speed perception
+const grid = new THREE.GridHelper(500, 50, '#6d737c', '#5a5f66'); grid.position.y = MOCK.PLAZA_H + 0.03; scene.add(grid);
+
+// ---------- roads (ribbons)
+const roadMat = new THREE.MeshLambertMaterial({ color: '#34373c', polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -4 });
+for (const r of world.roads) {
+  const pts = r.points, verts = [], idx = [];
+  let yPrev = world.heightAt(pts[0][0], pts[0][1]) + 1;
+  for (let i = 0; i < pts.length; i++) {
+    const a = pts[Math.max(0, i - 1)], c2 = pts[Math.min(pts.length - 1, i + 1)];
+    let dx = c2[0] - a[0], dz = c2[1] - a[1]; const L = Math.hypot(dx, dz) || 1; dx /= L; dz /= L;
+    const lx = dz, lz = -dx, hw = r.width / 2;
+    for (const sgn of [1, -1]) {
+      const x = pts[i][0] + lx * hw * sgn, z = pts[i][1] + lz * hw * sgn;
+      const y = world.surfaceHeight(x, z, yPrev + 1) + 0.06;
+      verts.push(x, y, z);
+    }
+    yPrev = world.surfaceHeight(pts[i][0], pts[i][1], yPrev + 1);
+    if (i > 0) { const k = i * 2; idx.push(k - 2, k - 1, k, k - 1, k + 1, k); }
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3)); g.setIndex(idx); g.computeVertexNormals();
+  scene.add(new THREE.Mesh(g, roadMat));
+}
+// ---------- buildings, deck, water
+const bMat = new THREE.MeshLambertMaterial({ color: '#c9c2b6' });
+const roofMat = new THREE.MeshLambertMaterial({ color: '#8d6e63' });
+for (const bd of world.buildings) {
+  const base = Math.min(world.heightAt(bd.minX, bd.minZ), world.heightAt(bd.maxX, bd.maxZ), world.heightAt(bd.minX, bd.maxZ), world.heightAt(bd.maxX, bd.minZ)) - 3;
+  const h = bd.top - base;
+  const m = new THREE.Mesh(new THREE.BoxGeometry(bd.maxX - bd.minX, h, bd.maxZ - bd.minZ), bd.name.startsWith('lowRoof') ? roofMat : bMat);
+  m.position.set((bd.minX + bd.maxX) / 2, base + h / 2, (bd.minZ + bd.maxZ) / 2);
+  scene.add(m);
+}
+const d = world.deck;
+const deck = new THREE.Mesh(new THREE.BoxGeometry(d.maxX - d.minX, 1, d.maxZ - d.minZ), new THREE.MeshLambertMaterial({ color: '#b0413e' }));
+deck.position.set((d.minX + d.maxX) / 2, d.top - 0.5, 0); scene.add(deck);
+const water = new THREE.Mesh(new THREE.PlaneGeometry(900, 4000), new THREE.MeshLambertMaterial({ color: '#2f6fa3', transparent: true, opacity: 0.85 }));
+water.rotation.x = -Math.PI / 2; water.position.set(1550, 0, 0); scene.add(water);
+
+// ---------- player
+let specIdx = 0;
+let player = new Vehicle(SAMPLE_SPECS[0], world);
+let model = createMockCarModel(SAMPLE_SPECS[0]);
+scene.add(model.group);
+player.isPlayer = true;
+const logLines = [];
+function log(s) { logLines.push(s); if (logLines.length > 4) logLines.shift(); document.getElementById('log').textContent = logLines.join('\n'); }
+function hook(v) {
+  v.onCollision = (s) => log(`collision ${s.toFixed(2)}`);
+  v.onLand = (s) => log(`land ${s.toFixed(2)}`);
+  v.onJump = () => log('hop!');
+  v.onSplash = () => log('SPLASH');
+  v.onShift = (g) => {};
+}
+hook(player);
+const TP = {
+  4: [0, 40, Math.PI], 5: [MOCK.HILL_X, MOCK.HILL_Z0 - 50, 0], 6: [MOCK.RUNWAY_X0 + 30, MOCK.RUNWAY_Z, Math.PI / 2],
+  7: [10, 0, Math.PI / 2], 8: [world.tracks[0].grid[0].x, world.tracks[0].grid[0].z, world.tracks[0].grid[0].heading],
+  9: [world.tracks[1].grid[0].x, world.tracks[1].grid[0].z, world.tracks[1].grid[0].heading], 0: [1150, 300, Math.PI / 2],
+};
+player.reset(0, 40, Math.PI);
+function setCar(i) {
+  const p = player.position.clone(), h = player.heading;
+  scene.remove(model.group); model.dispose();
+  specIdx = i;
+  player = new Vehicle(SAMPLE_SPECS[i], world); player.isPlayer = true; hook(player);
+  model = createMockCarModel(SAMPLE_SPECS[i]); scene.add(model.group);
+  player.reset(p.x, p.z, h);
+  log('car: ' + SAMPLE_SPECS[i].name);
+}
+
+// ---------- traffic + AI
+const traffic = new Traffic(scene, world, createMockTrafficCarModel, { count: 40 });
+traffic.setEnabled(false);
+let rivals = [];
+function toggleRivals() {
+  for (const r of rivals) { scene.remove(r.m.group); r.m.dispose(); }
+  if (rivals.length) { rivals = []; log('AI rivals off'); return; }
+  const tr = world.tracks[0];
+  for (let i = 1; i < 5; i++) {
+    const s = SAMPLE_SPECS[i % SAMPLE_SPECS.length];
+    const v = new Vehicle(s, world); const g = tr.grid[i]; v.reset(g.x, g.z, g.heading);
+    const m = createMockCarModel(s, { color: ['#ff9800', '#9c27b0', '#00bcd4', '#cddc39'][i - 1] }); scene.add(m.group);
+    rivals.push({ v, m, ai: new AIDriver(v, tr, { skill: 0.5 + i * 0.1, aggression: 0.6, name: 'AI' + i, player }) });
+  }
+  const g = tr.grid[0]; player.reset(g.x, g.z, g.heading);
+  log('AI rivals on Mock Ring');
+}
+
+// ---------- input
+const keys = new Set();
+let jumpEdge = false, camMode = 0;
+addEventListener('keydown', (e) => {
+  if (e.repeat) return;
+  keys.add(e.code);
+  if (e.code === 'KeyE') jumpEdge = true;
+  if (e.code === 'KeyR') { player.reset(player.position.x, player.position.z, player.heading); log('reset'); }
+  if (e.code === 'KeyC') camMode = (camMode + 1) % 3;
+  if (e.code === 'KeyT') { traffic.setEnabled(!traffic.enabled); log('traffic ' + (traffic.enabled ? 'on' : 'off')); }
+  if (e.code === 'KeyI') toggleRivals();
+  if (e.code.startsWith('Digit')) {
+    const n = +e.code.slice(5);
+    if (n >= 1 && n <= 3) setCar(n - 1);
+    else if (TP[n]) { player.reset(TP[n][0], TP[n][1], TP[n][2]); log('teleport ' + n); }
+  }
+  if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault();
+});
+addEventListener('keyup', (e) => keys.delete(e.code));
+addEventListener('blur', () => keys.clear());
+const input = { throttle: 0, brake: 0, steer: 0, handbrake: false, boost: false, jump: false, jumpPressed: false };
+function readInput() {
+  const k = (c) => keys.has(c);
+  input.throttle = k('KeyW') || k('ArrowUp') ? 1 : 0;
+  input.brake = k('KeyS') || k('ArrowDown') ? 1 : 0;
+  input.steer = (k('KeyD') || k('ArrowRight') ? 1 : 0) - (k('KeyA') || k('ArrowLeft') ? 1 : 0);
+  input.handbrake = k('Space');
+  input.boost = k('ShiftLeft') || k('ShiftRight');
+  input.jump = k('KeyE');
+  input.jumpPressed = jumpEdge; jumpEdge = false;
+  // gamepad
+  const gp = navigator.getGamepads ? [...navigator.getGamepads()].find(Boolean) : null;
+  if (gp) {
+    const ax = gp.axes[0] || 0;
+    if (Math.abs(ax) > 0.12) input.steer = ax;
+    if (gp.buttons[7]) input.throttle = Math.max(input.throttle, gp.buttons[7].value);
+    if (gp.buttons[6]) input.brake = Math.max(input.brake, gp.buttons[6].value);
+    if (gp.buttons[2] && gp.buttons[2].pressed) input.handbrake = true;
+    if ((gp.buttons[5] && gp.buttons[5].pressed) || (gp.buttons[1] && gp.buttons[1].pressed)) input.boost = true;
+    const a = gp.buttons[0] && gp.buttons[0].pressed;
+    if (a && !readInput._a) input.jumpPressed = true;
+    if (a) input.jump = true;
+    readInput._a = a;
+  }
+}
+
+// ---------- tuning knobs
+const KNOBS = [
+  ['gravityScale', 1, 2, 0.05], ['gripScale', 0.5, 1.6, 0.05], ['powerScale', 0.5, 2, 0.05], ['steerOverdrive', 0.8, 2, 0.05],
+  ['counterSteer', 0, 1, 0.05], ['driftAssist', 0, 2, 0.1], ['handbrakeGrip', 0.1, 1, 0.05], ['rearGripBias', 0.9, 1.3, 0.01],
+  ['lateralPriority', 0, 1, 0.05], ['tractionControl', 0, 1, 0.05], ['weightTransfer', 0, 1, 0.05], ['pitchTransfer', 0, 1, 0.05],
+  ['tailGrip', 0.4, 1, 0.02], ['tailGripRear', 0.4, 1, 0.02], ['suspZeta', 0.2, 1, 0.05], ['antiRoll', 0, 1.5, 0.05],
+  ['airLevel', 0, 5, 0.1], ['hoverGravity', 0, 1, 0.05], ['restitution', 0, 0.8, 0.05], ['wallSpin', 0, 2, 0.1],
+];
+const knobsEl = document.getElementById('knobs');
+for (const [name, lo, hi, st] of KNOBS) {
+  const l = document.createElement('label');
+  const span = document.createElement('span'); span.textContent = `${name} ${PHYS[name]}`;
+  const r = document.createElement('input'); r.type = 'range'; r.min = lo; r.max = hi; r.step = st; r.value = PHYS[name];
+  r.oninput = () => {
+    PHYS[name] = +r.value; span.textContent = `${name} ${PHYS[name]}`;
+    if (['gravityScale', 'suspZeta', 'antiRoll'].includes(name)) { player._setupSprings(); for (const rv of rivals) rv.v._setupSprings(); }
+  };
+  l.append(span, r); knobsEl.append(l);
+}
+
+// ---------- loop
+const clock = new THREE.Clock();
+const camPos = new THREE.Vector3(0, 10, -10), camLook = new THREE.Vector3();
+const tmp = new THREE.Vector3();
+let fpsAcc = 0, fpsN = 0, fps = 0;
+const info = document.getElementById('info');
+const bar = (id, f) => { document.querySelector(`#${id} > div`).style.width = `${Math.round(Math.max(0, Math.min(1, f)) * 100)}%`; };
+function frame() {
+  requestAnimationFrame(frame);
+  const dt = Math.min(0.1, clock.getDelta());
+  readInput();
+  player.update(dt, input);
+  for (const r of rivals) { r.v.update(dt, r.ai.getInput(dt, world, [player, ...rivals.map(o => o.v), ...traffic.proxies])); if (r.ai.needsReset) r.ai.resetToTrack(); }
+  traffic.update(dt, player, rivals.map(r => r.v));
+  resolveVehicleCollisions([player, ...rivals.map(r => r.v), ...traffic.proxies]);
+  const nm = traffic.nearMissCheck(player);
+  if (nm) { player.addFuel(0.08 * nm); log(`near miss x${nm} (+fuel)`); }
+  if (player.inWater && player._waterT === undefined) player._waterT = 0;
+  if (player.inWater) { player._waterT += dt; if (player._waterT > 2) { player.reset(1150, 300, Math.PI / 2); player._waterT = undefined; log('respawn from water'); } }
+  player.applyToModel(model);
+  for (const r of rivals) r.v.applyToModel(r.m);
+
+  // camera
+  const F = tmp.set(Math.sin(player.heading), 0, Math.cos(player.heading));
+  const dist = [7.5, 13, 0.1][camMode], height = [2.8, 5, 1.2][camMode];
+  const target = new THREE.Vector3().copy(player.position).addScaledVector(F, camMode === 2 ? 0.6 : -dist);
+  target.y += height;
+  const k = 1 - Math.exp(-dt * (camMode === 2 ? 30 : 6));
+  camPos.lerp(target, k);
+  const g = world.surfaceHeight(camPos.x, camPos.z, camPos.y + 2);
+  if (camPos.y < g + 0.8) camPos.y = g + 0.8;
+  camera.position.copy(camPos);
+  camLook.copy(player.position).addScaledVector(F, camMode === 2 ? 10 : 2); camLook.y += camMode === 2 ? 1 : 1.2;
+  camera.lookAt(camLook);
+  camera.fov = 62 + Math.min(18, player.speedKmh / 20) + (player.boosting ? 6 : 0);
+  camera.updateProjectionMatrix();
+  renderer.render(scene, camera);
+
+  // hud
+  fpsAcc += dt; fpsN++; if (fpsAcc > 0.5) { fps = fpsN / fpsAcc; fpsAcc = 0; fpsN = 0; }
+  document.getElementById('spd').textContent = Math.round(player.speedKmh);
+  document.getElementById('gear').textContent = player.gear < 0 ? 'R' : player.gear;
+  bar('rpm', player.rpm); bar('slip', player.slip); bar('fuel', player.thrusterFuel);
+  document.getElementById('slipv').textContent = player.slip.toFixed(2);
+  info.innerHTML = [
+    `drift ${player.drifting ? 'YES' : 'no'} angle ${(player.driftAngle * 57.3).toFixed(0)}&deg;`,
+    `lat ${player.lateralG.toFixed(2)} g &middot; long ${player.longitudinalG.toFixed(2)} g`,
+    `ground ${player.onGround} (${player.wheelsOnGround}) air ${player.airTime.toFixed(2)}s`,
+    `${player.boosting ? 'BOOST ' : ''}${player.hovering ? 'HOVER ' : ''}thr ${player.thrusterLevel.toFixed(2)} ${player.thrusterMode}`,
+    `surface ${player.surface}${player.inWater ? ' WATER' : ''} &middot; y ${player.position.y.toFixed(1)}`,
+    `steer ${(player.steerAngle * 57.3).toFixed(1)}&deg; / lim ${(player.steerLimit * 57.3).toFixed(1)}&deg;`,
+    `${SAMPLE_SPECS[specIdx].name} &middot; traffic ${traffic.enabled ? traffic.proxies.length : 'off'} &middot; ${fps.toFixed(0)} fps`,
+  ].join('<br>');
+}
+addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
+window.__phys = { get player() { return player; }, PHYS, world, traffic, get rivals() { return rivals; }, input, keys };
+frame();
+</script>
+</body>
+</html>

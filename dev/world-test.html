@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SF World Test</title>
+<style>
+  :root { --bg: #0b0f14; --fg: #e8edf2; --muted: #93a1b0; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); font: 12px/1.4 system-ui, sans-serif; overflow: hidden; }
+  #hud { position: fixed; left: 10px; top: 10px; background: rgba(0,0,0,0.55); padding: 8px 10px; border-radius: 6px; white-space: pre; pointer-events: none; }
+  #help { position: fixed; right: 10px; top: 10px; background: rgba(0,0,0,0.55); padding: 8px 10px; border-radius: 6px; color: var(--muted); white-space: pre; }
+  #mini { position: fixed; right: 10px; bottom: 10px; width: 360px; border: 1px solid #333; display: none; }
+  #load { position: fixed; inset: 0; display: grid; place-items: center; font-size: 16px; background: var(--bg); }
+</style>
+<script type="importmap">{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+</head>
+<body>
+<div id="load">Loading...</div>
+<div id="hud"></div>
+<div id="help">Drag: look   WASD: fly   Q/E: down/up   Shift: fast
+N: night toggle   T: tracks   M: minimap   G: drive-cam (ground)
+1-9,0: landmarks   [ ]: track grids</div>
+<canvas id="mini"></canvas>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { loadWorld, ATTRIBUTION } from '../src/world/city.js';
+
+const params = new URLSearchParams(location.search);
+const quality = params.get('q') || 'high';
+const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+const sky = new THREE.Color(0x9cc4e6);
+scene.background = sky.clone();
+scene.fog = new THREE.Fog(0xbfd3e3, 400, 6500);
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.5, 30000);
+const hemi = new THREE.HemisphereLight(0xcfe3ff, 0x4a4036, 0.9);
+scene.add(hemi);
+const sun = new THREE.DirectionalLight(0xfff1dc, 2.6);
+sun.position.set(800, 1200, 500);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+const sc = sun.shadow.camera; sc.left = sc.bottom = -250; sc.right = sc.top = 250; sc.near = 10; sc.far = 3000;
+sun.shadow.bias = -0.0005;
+scene.add(sun, sun.target);
+const worldRoot = new THREE.Group();
+scene.add(worldRoot);
+
+const loadEl = document.getElementById('load');
+const world = await loadWorld(worldRoot, { quality, onProgress: (f, m) => (loadEl.textContent = `${Math.round(f * 100)}%  ${m}`) });
+loadEl.remove();
+window.world = world; window.THREE = THREE; window.renderer = renderer; window.camera = camera; window.scene = scene;
+console.log('world stats', world.stats, ATTRIBUTION);
+
+// tracks overlay
+const trackGroup = new THREE.Group();
+trackGroup.visible = false;
+scene.add(trackGroup);
+const cols = [0xff3030, 0xff9900, 0xffee00, 0x00e5ff, 0xff00ff, 0x33ff66];
+world.tracks.forEach((t, i) => {
+  const pts = t.path.map(([x, z]) => new THREE.Vector3(x, world.surfaceHeight(x, z, 1e4) + 1.5, z));
+  if (t.loop) pts.push(pts[0].clone());
+  trackGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: cols[i] })));
+  for (const c of t.checkpoints) {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(c.width, 4, 0.5), new THREE.MeshBasicMaterial({ color: cols[i], transparent: true, opacity: 0.4 }));
+    m.position.set(c.x, world.surfaceHeight(c.x, c.z, 1e4) + 2, c.z); m.rotation.y = c.heading;
+    trackGroup.add(m);
+  }
+  for (const g of t.grid) {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(2, 1.2, 4.5), new THREE.MeshStandardMaterial({ color: 0xffffff }));
+    m.position.set(g.x, world.surfaceHeight(g.x, g.z, 1e4) + 0.6, g.z); m.rotation.y = g.heading;
+    trackGroup.add(m);
+  }
+});
+const mini = document.getElementById('mini');
+mini.width = world.minimapImage.width; mini.height = world.minimapImage.height;
+mini.getContext('2d').drawImage(world.minimapImage, 0, 0);
+
+// fly camera
+let yaw = Math.PI * 0.85, pitch = -0.12;
+const sp = world.spawn;
+camera.position.set(sp.x, world.surfaceHeight(sp.x, sp.z, 1e4) + 25, sp.z);
+yaw = sp.heading + Math.PI;
+const view = params.get('view');
+if (view) { const [x, y, z, yw, pt] = view.split(',').map(Number); camera.position.set(x, y, z); yaw = yw; pitch = pt; }
+window.setView = (x, y, z, yw, pt) => { camera.position.set(x, y, z); yaw = yw; pitch = pt; };
+window.lookFrom = (x, y, z, tx, ty, tz) => { camera.position.set(x, y, z); const dx = tx - x, dy = ty - y, dz = tz - z; yaw = Math.atan2(-dx, -dz); pitch = Math.atan2(dy, Math.hypot(dx, dz)); };
+window.setNightTarget = (n) => { nightTarget = n; night = n; };
+const keys = {};
+let drive = false, night = 0, nightTarget = 0, gridIdx = -1;
+addEventListener('keydown', (e) => {
+  keys[e.code] = true;
+  if (e.code === 'KeyN') nightTarget = nightTarget ? 0 : 1;
+  if (e.code === 'KeyT') trackGroup.visible = !trackGroup.visible;
+  if (e.code === 'KeyM') mini.style.display = mini.style.display === 'block' ? 'none' : 'block';
+  if (e.code === 'KeyG') drive = !drive;
+  const d = '1234567890'.indexOf(e.key);
+  if (d >= 0 && world.landmarks[d]) {
+    const l = world.landmarks[d];
+    camera.position.set(l.x - 120, world.heightAt(l.x, l.z) + 80, l.z + 220); yaw = Math.atan2(-120, 220) + Math.PI; pitch = -0.25;
+  }
+  if (e.key === ']' || e.key === '[') {
+    gridIdx = (gridIdx + (e.key === ']' ? 1 : world.tracks.length - 1)) % world.tracks.length;
+    const g = world.tracks[gridIdx].grid[0];
+    camera.position.set(g.x, world.surfaceHeight(g.x, g.z, 1e4) + 3, g.z); yaw = g.heading + Math.PI; pitch = -0.08; drive = true;
+  }
+});
+addEventListener('keyup', (e) => (keys[e.code] = false));
+let drag = false;
+renderer.domElement.addEventListener('pointerdown', () => (drag = true));
+addEventListener('pointerup', () => (drag = false));
+addEventListener('pointermove', (e) => { if (drag) { yaw -= e.movementX * 0.003; pitch = Math.max(-1.5, Math.min(1.5, pitch - e.movementY * 0.003)); } });
+addEventListener('resize', () => { renderer.setSize(innerWidth, innerHeight); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); });
+
+const hud = document.getElementById('hud');
+const clock = new THREE.Clock();
+let fpsT = 0, frames = 0, fps = 0;
+const fwd = new THREE.Vector3(), right = new THREE.Vector3();
+function frame() {
+  const dt = Math.min(0.05, clock.getDelta());
+  const speed = (keys.ShiftLeft || keys.ShiftRight ? 400 : 60) * dt;
+  fwd.set(-Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), -Math.cos(yaw) * Math.cos(pitch));
+  right.set(Math.cos(yaw), 0, -Math.sin(yaw));
+  if (keys.KeyW) camera.position.addScaledVector(fwd, speed);
+  if (keys.KeyS) camera.position.addScaledVector(fwd, -speed);
+  if (keys.KeyD) camera.position.addScaledVector(right, speed);
+  if (keys.KeyA) camera.position.addScaledVector(right, -speed);
+  if (keys.KeyE) camera.position.y += speed;
+  if (keys.KeyQ) camera.position.y -= speed;
+  const gh = world.surfaceHeight(camera.position.x, camera.position.z, camera.position.y);
+  if (drive) camera.position.y = gh + 1.6;
+  camera.position.y = Math.max(camera.position.y, gh + 0.8);
+  camera.lookAt(camera.position.clone().add(fwd));
+  night += (nightTarget - night) * Math.min(1, dt * 2);
+  sun.intensity = 2.6 * (1 - night) + 0.05;
+  hemi.intensity = 0.9 * (1 - night * 0.85);
+  scene.background.copy(sky).lerp(new THREE.Color(0x060a14), night);
+  scene.fog.color.set(0xbfd3e3).lerp(new THREE.Color(0x0a1020), night);
+  sun.position.set(camera.position.x + 800, 1200, camera.position.z + 500);
+  sun.target.position.set(camera.position.x, 0, camera.position.z);
+  world.update(dt, camera, { night, time: clock.elapsedTime });
+  renderer.render(scene, camera);
+  frames++; fpsT += dt;
+  if (fpsT > 0.5) { fps = frames / fpsT; frames = 0; fpsT = 0; }
+  const i = renderer.info.render;
+  hud.textContent = `${quality}  ${fps.toFixed(0)} fps   calls ${i.calls}   tris ${(i.triangles / 1e6).toFixed(2)}M
+pos ${camera.position.x.toFixed(0)}, ${camera.position.y.toFixed(0)}, ${camera.position.z.toFixed(0)}  yaw ${yaw.toFixed(2)} pitch ${pitch.toFixed(2)}
+surface ${world.surfaceAt(camera.position.x, camera.position.z, camera.position.y)}  ground ${gh.toFixed(1)}  night ${night.toFixed(2)}
+load ${world.stats.loadMs} ms   ${ATTRIBUTION}`;
+  requestAnimationFrame(frame);
+}
+frame();
+</script>
+</body>
+</html>

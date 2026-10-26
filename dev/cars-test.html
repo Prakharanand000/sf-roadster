@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cars Test Bench</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #050507; color: #dfe3ea; font: 13px/1.35 system-ui, sans-serif; overflow: hidden; }
+  #ui { position: fixed; left: 10px; top: 10px; max-width: 520px; display: flex; flex-direction: column; gap: 6px; z-index: 2; }
+  .row { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+  button { background: #16181d; color: #dfe3ea; border: 1px solid #2c3038; border-radius: 6px; padding: 4px 8px; cursor: pointer; font: inherit; }
+  button.on { background: #2a5bd7; border-color: #4b7bf0; }
+  .sw { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #333; cursor: pointer; }
+  #info { position: fixed; right: 10px; bottom: 10px; text-align: right; opacity: 0.8; white-space: pre; z-index: 2; }
+  #hide { position: fixed; right: 10px; top: 10px; z-index: 3; }
+  body.clean #ui, body.clean #info { display: none; }
+</style>
+<script type="importmap">{"imports":{
+  "three":"../node_modules/three/build/three.module.js",
+  "three/addons/":"../node_modules/three/examples/jsm/"}}</script>
+</head>
+<body>
+<div id="ui">
+  <div class="row" id="cars"></div>
+  <div class="row" id="colors"></div>
+  <div class="row" id="views"></div>
+  <div class="row" id="toggles"></div>
+  <div class="row" id="scenes"></div>
+</div>
+<button id="hide">UI</button>
+<div id="info"></div>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { CARS, createCarModel, createTrafficCarModel } from '../src/cars/models.js';
+import { CarFX } from '../src/cars/fx.js';
+import { createShowroom } from '../src/cars/showroom.js';
+import { triCount } from '../src/cars/util.js';
+
+const qs = new URLSearchParams(location.search);
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(2, devicePixelRatio));
+renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+const envTex = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+scene.environment = envTex;
+scene.background = new THREE.Color(0x050507);
+
+const camera = new THREE.PerspectiveCamera(36, innerWidth / innerHeight, 0.05, 3000);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.45, 0.4, 1.05);
+composer.addPass(bloom);
+composer.addPass(new OutputPass());
+
+// --- showroom
+const show = createShowroom();
+scene.add(show.group);
+
+// --- street scene (daylight, at origin) for shadows / traffic / fx
+const street = new THREE.Group(); street.visible = false; scene.add(street);
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), new THREE.MeshStandardMaterial({ color: 0x2b2d31, roughness: 0.92 }));
+ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; street.add(ground);
+for (let i = -10; i <= 10; i++) { const l = new THREE.Mesh(new THREE.PlaneGeometry(0.15, 3), new THREE.MeshStandardMaterial({ color: 0xd8d2b8, roughness: 0.7 })); l.rotation.x = -Math.PI / 2; l.position.set(-3, 0.005, i * 8); street.add(l); }
+const sun = new THREE.DirectionalLight(0xfff1dd, 3.2); sun.position.set(12, 18, 8); sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048); Object.assign(sun.shadow.camera, { left: -14, right: 14, top: 14, bottom: -14, near: 1, far: 60 }); sun.shadow.bias = -0.0003; sun.shadow.normalBias = 0.03;
+street.add(sun, sun.target);
+const hemi = new THREE.HemisphereLight(0xbcd4ff, 0x40362c, 0.6); street.add(hemi);
+
+const fx = new CarFX(scene);
+let mode = qs.get('scene') || 'showroom';
+let current = null, currentId = qs.get('car') || 'roadster', fxHandle = null;
+const traffic = [];
+const lineup = [];
+const toggles = { headlights: false, brake: false, reverse: false, boost: false, hover: false, steer: false, spin: false, turntable: !qs.has('quad'), drift: false, bloom: true };
+
+function setCar(id, color) {
+  if (current) { fx.remove(fxHandle); current.dispose(); }
+  currentId = id;
+  current = createCarModel(id, { color, headlightSpot: true });
+  if (mode === 'showroom') show.carAnchor.add(current.group); else { current.group.position.set(0, 0, 0); current.group.rotation.set(0, 0, 0); street.add(current.group); }
+  fxHandle = fx.add(current);
+  applyToggles();
+  buildColors();
+  document.querySelectorAll('#cars button').forEach((b) => b.classList.toggle('on', b.dataset.id === id));
+  info();
+}
+function info() {
+  const s = CARS.find((c) => c.id === currentId);
+  document.getElementById('info').textContent = `${s.make} ${s.name}\n${triCount(current.group)} tris\nL ${s.dims.length}  W ${s.dims.width}  H ${s.dims.height}`;
+}
+function applyToggles() {
+  if (!current) return;
+  current.setHeadlights(toggles.headlights); current.setBrake(toggles.brake); current.setReverse(toggles.reverse);
+  bloom.enabled = toggles.bloom;
+  show.spin = toggles.turntable ? 0.22 : 0;
+}
+const VIEWS = {
+  'front34': [5.0, 1.45, 6.0, 0.55], side: [7.6, 0.85, 0.0, 0.55], rear34: [-4.8, 1.5, -6.1, 0.6], rear: [0, 1.2, -8.2, 0.55],
+  front: [0, 1.0, 8.2, 0.5], top: [0.01, 9.5, 0.0, 0.0], low34: [3.6, 0.45, 5.0, 0.5], wheel: [2.6, 0.5, 2.4, 0.35], rearwheel: [2.6, 0.5, -0.4, 0.4],
+};
+function setView(name) {
+  const v = VIEWS[name]; if (!v) return;
+  const base = mode === 'showroom' ? show.carAnchor.getWorldPosition(new THREE.Vector3()) : new THREE.Vector3();
+  if (mode === 'showroom') { show.turntable.rotation.y = 0; toggles.turntable = false; applyToggles(); syncToggleButtons(); }
+  if (mode === 'lineup') base.set(0, 0, 0);
+  camera.position.set(base.x + v[0], base.y + v[1], base.z + v[2]);
+  controls.target.set(base.x, base.y + v[3], base.z);
+  controls.update();
+}
+function setScene(m) {
+  mode = m;
+  show.setVisible(m === 'showroom');
+  street.visible = m !== 'showroom';
+  scene.background = new THREE.Color(m === 'showroom' ? 0x050507 : 0x9fb8d6);
+  for (const t of traffic) t.dispose(); traffic.length = 0;
+  for (const l of lineup) l.dispose(); lineup.length = 0;
+  if (m === 'street') {
+    for (let i = 0; i < 7; i++) { const t = createTrafficCarModel(i * 7 + 1); t.group.position.set(-6, 0, -20 + i * 7); t.group.rotation.y = Math.PI; street.add(t.group); traffic.push(t); }
+  }
+  if (m === 'lineup') {
+    CARS.forEach((c, i) => { const mm = createCarModel(c.id); mm.group.position.set((i % 4 - 1.5) * 5.2, 0, i < 4 ? 4 : 10); mm.group.rotation.y = Math.PI / 2; street.add(mm.group); lineup.push(mm); });
+    for (let i = 0; i < 12; i++) { const t = createTrafficCarModel(i * 3 + 2); t.group.position.set((i % 6 - 2.5) * 6, 0, i < 6 ? -4 : -11); t.group.rotation.y = Math.PI / 2; street.add(t.group); lineup.push(t); }
+  }
+  setCar(currentId);
+  document.querySelectorAll('#scenes button').forEach((b) => b.classList.toggle('on', b.dataset.id === m));
+  setView(m === 'lineup' ? 'top' : 'front34');
+  if (m === 'lineup') { camera.position.set(0, 14, 26); controls.target.set(0, 0, 0); controls.update(); }
+}
+
+function btn(parent, label, onClick, id) { const b = document.createElement('button'); b.textContent = label; if (id) b.dataset.id = id; b.onclick = onClick; parent.appendChild(b); return b; }
+for (const c of CARS) btn(document.getElementById('cars'), c.name, () => setCar(c.id), c.id);
+function buildColors() {
+  const el = document.getElementById('colors'); el.innerHTML = '';
+  const s = CARS.find((c) => c.id === currentId);
+  for (const col of s.colors) { const d = document.createElement('div'); d.className = 'sw'; d.style.background = col; d.onclick = () => current.setColor(col); el.appendChild(d); }
+}
+for (const v of Object.keys(VIEWS)) btn(document.getElementById('views'), v, () => setView(v));
+function syncToggleButtons() { document.querySelectorAll('#toggles button').forEach((b) => b.classList.toggle('on', !!toggles[b.dataset.id])); }
+for (const k of Object.keys(toggles)) btn(document.getElementById('toggles'), k, () => { toggles[k] = !toggles[k]; applyToggles(); syncToggleButtons(); }, k);
+syncToggleButtons();
+for (const m of ['showroom', 'street', 'lineup']) btn(document.getElementById('scenes'), m, () => setScene(m), m);
+document.getElementById('hide').onclick = () => document.body.classList.toggle('clean');
+if (qs.has('clean')) document.body.classList.add('clean');
+
+// fake vehicle state for fx testing
+const vs = { position: new THREE.Vector3(), quaternion: new THREE.Quaternion(), velocity: new THREE.Vector3(), heading: 0, speed: 0, onGround: true, airTime: 0, drifting: false, driftAngle: 0, slip: 0, boosting: false, hovering: false, thrusterFuel: 1, wheelContacts: [0, 1, 2, 3].map(() => ({ x: 0, y: 0, z: 0, onGround: true, slip: 0 })), surface: 'road', inWater: false, lastImpact: 0 };
+let driftT = 0;
+
+const clock = new THREE.Clock();
+let t = 0;
+function frame() {
+  const dt = Math.min(0.05, clock.getDelta());
+  step(dt);
+  controls.update();
+  if (bench.quad) renderQuad(); else composer.render();
+  requestAnimationFrame(frame);
+}
+function step(dt) {
+  t += dt;
+  if (mode === 'showroom') show.update(dt);
+  if (current) {
+    const thr = toggles.boost ? 1 : toggles.hover ? 0.8 : 0;
+    current.setThruster(thr, toggles.hover ? 'hover' : 'boost');
+    current.update?.(dt);
+    const steer = toggles.steer ? Math.sin(t * 1.2) * 0.5 : 0;
+    current.wheelPivots[0].rotation.y = current.wheelPivots[1].rotation.y = -steer;
+    if (toggles.spin) for (const w of current.wheels) w.rotation.x += dt * 12;
+    // drift circle demo (street scene)
+    if (toggles.drift && mode === 'street') {
+      driftT += dt * 0.6;
+      const r = 9, h = driftT + Math.PI / 2;
+      current.group.position.set(Math.cos(driftT) * r, 0, Math.sin(driftT) * r);
+      current.group.rotation.y = -driftT + 0.5;
+      current.group.updateMatrixWorld();
+      vs.position.copy(current.group.position);
+      vs.velocity.set(-Math.sin(driftT) * r * 0.6, 0, Math.cos(driftT) * r * 0.6).multiplyScalar(3);
+      vs.drifting = true; vs.slip = 0.9; vs.boosting = toggles.boost; vs.hovering = toggles.hover;
+      current.wheelPivots.forEach((p, i) => { const w = p.getWorldPosition(new THREE.Vector3()); vs.wheelContacts[i].x = w.x; vs.wheelContacts[i].y = 0; vs.wheelContacts[i].z = w.z; vs.wheelContacts[i].slip = i >= 2 ? 0.9 : 0.3; });
+      for (const w of current.wheels) w.rotation.x += dt * 30;
+      void h;
+    } else { vs.drifting = false; vs.slip = 0; vs.boosting = toggles.boost; vs.hovering = toggles.hover; vs.velocity.set(0, 0, 0); for (const c of vs.wheelContacts) c.slip = 0; }
+    fx.update(dt, fxHandle, vs);
+  }
+  for (const tc of traffic) { tc.group.position.z += dt * 6; if (tc.group.position.z > 30) tc.group.position.z = -30; for (const w of tc.wheels) w.rotation.x -= dt * 18; }
+}
+/** advance the simulation (hidden tabs throttle rAF) */
+function advance(sec, dt = 1 / 60) { for (let i = 0; i < sec / dt; i++) { step(dt); fx.step(dt, false); } controls.update(); composer.render(); }
+addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight); });
+addEventListener('keydown', (e) => { if (e.key === 'b') fx.burst('collision', current.group.getWorldPosition(new THREE.Vector3())); if (e.key === 'c') fx.burst('checkpoint', current.group.getWorldPosition(new THREE.Vector3())); if (e.key === 'l') fx.burst('land', current.group.getWorldPosition(new THREE.Vector3())); if (e.key === 'w') fx.burst('splash', current.group.getWorldPosition(new THREE.Vector3())); });
+
+// quad view: 4 fixed views of the current car (shape review, no bloom)
+const qcam = new THREE.PerspectiveCamera(30, 1, 0.05, 3000);
+const QV = [[5.2, 1.5, 6.2, 0.55], [8.6, 0.8, 0.0, 0.55], [-5.0, 1.6, -6.2, 0.6], [0.0, 1.0, 9.0, 0.5]];
+function renderQuad() {
+  const w = innerWidth, h = innerHeight, hw = Math.floor(w / 2), hh = Math.floor(h / 2);
+  const base = current.group.getWorldPosition(new THREE.Vector3());
+  renderer.setScissorTest(true);
+  const views = bench.quadViews || QV;
+  views.forEach((v, i) => {
+    const x = (i % 2) * hw, y = (i < 2 ? hh : 0);
+    renderer.setViewport(x, y, hw, hh); renderer.setScissor(x, y, hw, hh);
+    qcam.aspect = hw / hh; qcam.fov = v[4] || 30; qcam.updateProjectionMatrix();
+    qcam.position.set(base.x + v[0], base.y + v[1], base.z + v[2]); qcam.lookAt(base.x, base.y + v[3], base.z);
+    renderer.render(scene, qcam);
+  });
+  renderer.setScissorTest(false); renderer.setViewport(0, 0, w, h);
+}
+window.bench = { quad: qs.has('quad'), advance, setCar, setView, setScene, toggles, applyToggles, camera, controls, scene, renderer, get car() { return current; }, fx, show, CARS };
+setScene(mode);
+if (qs.get('view')) setView(qs.get('view'));
+frame();
+</script>
+</body>
+</html>

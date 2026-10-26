@@ -1,0 +1,1 @@
+[out:json][timeout:200];(way["highway"]["bridge"](37.76000,-122.50000,37.84000,-122.35500);way["man_made"~"bridge|tower"](37.76000,-122.50000,37.84000,-122.35500);way["bridge:structure"](37.76000,-122.50000,37.84000,-122.35500););out geom;

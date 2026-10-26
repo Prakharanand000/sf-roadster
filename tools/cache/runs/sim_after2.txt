@@ -1,0 +1,32 @@
+embarcadero-sprint  L=5232m laps=1 sim 116s (0.6s wall)
+   autopilot      finished 111.4s laps[111.4] recov 0 (0.0/lap) resets 1 water 0 hardHits 2
+   gt3rs@0.55     finished 115.7s laps[115.7] recov 0 (0.0/lap) resets 0 water 0 hardHits 4
+   revuelto@0.75  finished 110.4s laps[110.4] recov 0 (0.0/lap) resets 0 water 0 hardHits 4
+   chiron@0.95    finished 109.7s laps[109.7] recov 0 (0.0/lap) resets 0 water 0 hardHits 0
+lombard-zigzag      L=2138m laps=3 sim 276s (1.1s wall)
+   autopilot      finished 264.8s laps[89.2/89.2/86.4] recov 0 (0.0/lap) resets 0 water 0 hardHits 5
+   gt3rs@0.55     finished 272.2s laps[90.7/88.7/92.8] recov 1 (0.3/lap) resets 0 water 0 hardHits 3
+   revuelto@0.75  finished 266.0s laps[88.5/88.9/88.5] recov 0 (0.0/lap) resets 0 water 0 hardHits 1
+   chiron@0.95    finished 275.9s laps[91.8/89.8/94.2] recov 0 (0.0/lap) resets 0 water 0 hardHits 4
+golden-gate-run     L=7077m laps=1 sim 172s (0.7s wall)
+   autopilot      finished 160.1s laps[160.1] recov 0 (0.0/lap) resets 0 water 0 hardHits 1
+   gt3rs@0.55     finished 171.3s laps[171.3] recov 0 (0.0/lap) resets 0 water 0 hardHits 6
+   revuelto@0.75  finished 171.6s laps[171.6] recov 0 (0.0/lap) resets 0 water 0 hardHits 6
+   chiron@0.95    finished 167.9s laps[167.9] recov 0 (0.0/lap) resets 0 water 0 hardHits 5
+nob-hill-jumps      L=2318m laps=2 sim 143s (0.6s wall)
+   autopilot      finished 143.5s laps[78.6/64.8] recov 1 (0.5/lap) resets 0 water 0 hardHits 1
+   gt3rs@0.55     finished 142.6s laps[71.7/70.9] recov 0 (0.0/lap) resets 0 water 0 hardHits 0
+   revuelto@0.75  finished 142.5s laps[74.1/68.4] recov 0 (0.0/lap) resets 0 water 0 hardHits 3
+   chiron@0.95    finished 139.2s laps[69.5/69.7] recov 0 (0.0/lap) resets 0 water 0 hardHits 0
+downtown-gp         L=3227m laps=3 sim 319s (1.5s wall)
+   autopilot      finished 315.0s laps[108.1/103.1/103.8] recov 0 (0.0/lap) resets 0 water 0 hardHits 5
+   gt3rs@0.55     finished 318.9s laps[109.8/105.2/103.9] recov 0 (0.0/lap) resets 0 water 0 hardHits 6
+   revuelto@0.75  finished 318.0s laps[111.3/103.3/103.4] recov 0 (0.0/lap) resets 0 water 0 hardHits 2
+   chiron@0.95    finished 318.5s laps[108.0/103.7/106.7] recov 0 (0.0/lap) resets 0 water 0 hardHits 3
+painted-ladies      L=4563m laps=2 sim 216s (1.0s wall)
+   autopilot      finished 208.5s laps[104.8/103.6] recov 0 (0.0/lap) resets 0 water 0 hardHits 0
+   gt3rs@0.55     finished 216.2s laps[109.1/107.1] recov 0 (0.0/lap) resets 0 water 0 hardHits 2
+   revuelto@0.75  finished 212.1s laps[107.6/104.5] recov 0 (0.0/lap) resets 0 water 0 hardHits 2
+   chiron@0.95    finished 213.0s laps[108.9/104.1] recov 0 (0.0/lap) resets 0 water 0 hardHits 5
+
+SUMMARY rivals: avg recov/lap 0.02, max recov/lap 0.3, resets 1, water 0, DNF 0

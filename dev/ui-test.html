@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>UI Test Bench</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600;700&family=Big+Shoulders+Display:wght@600;700;800;900&family=Chivo+Mono:wght@400;500;600;700&family=Rozha+One&display=swap">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  :root { color-scheme: dark; }
+  html, body { height: 100%; margin: 0; overflow: hidden; background: #070b16; }
+  #game { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+  #ui { position: fixed; inset: 0; }
+  #dev { position: fixed; z-index: 100; right: 6px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 3px; font: 11px/1 system-ui, sans-serif; }
+  #dev button { font: inherit; padding: 5px 8px; background: #1b2540; color: #dde5f3; border: 1px solid #33456e; border-radius: 3px; cursor: pointer; text-align: left; }
+  #dev button:hover { background: #2a3a63; }
+  #dev.hide > :not(#devToggle) { display: none; }
+  #log { position: fixed; z-index: 100; left: 6px; top: 50%; max-width: 260px; font: 10px/1.3 ui-monospace, monospace; color: #9fb0cc; pointer-events: none; white-space: pre-wrap; opacity: .8; }
+  body.clean #dev, body.clean #log { display: none; }
+</style>
+</head>
+<body>
+<canvas id="game"></canvas>
+<div id="ui"></div>
+<div id="log"></div>
+<div id="dev"></div>
+<script type="module">
+import { UI } from '../src/ui/ui.js';
+
+// ------------------------------------------------------------ fake data
+const CARS = [
+  { id: 'roadster', name: 'Tesla Roadster', make: 'Tesla', engine: 'electric', tagline: 'SpaceX package: cold-gas thrusters for hills, hops and showing off.', colors: ['#c8102e', '#f2f2f2', '#121418', '#1f4fa3', '#9aa3ad'], stats: { speed: 9, accel: 10, handling: 7.5, thrusters: 10 } },
+  { id: 'gt3rs', name: 'Porsche 911 GT3 RS', make: 'Porsche', engine: 'flat6', tagline: 'A rear wing the size of a dining table and a 9,000 rpm howl.', colors: ['#7ac143', '#f2f2f2', '#1a1a1a', '#ff6a13'], stats: { speed: 7.5, accel: 7, handling: 10, thrusters: 5 } },
+  { id: 'amgone', name: 'Mercedes-AMG ONE', make: 'Mercedes-AMG', engine: 'hybrid-v8', tagline: 'A Formula 1 heart with number plates.', colors: ['#c0c4c8', '#111111', '#e8e8e8'], stats: { speed: 9, accel: 8.5, handling: 9, thrusters: 6 } },
+  { id: '720s', name: 'McLaren 720S', make: 'McLaren', engine: 'v8', tagline: 'Dihedral doors, papaya attitude.', colors: ['#ff8000', '#1d2b4a', '#f2f2f2', '#2b2b2b'], stats: { speed: 8.5, accel: 8.5, handling: 8.5, thrusters: 5.5 } },
+  { id: 'revuelto', name: 'Lamborghini Revuelto', make: 'Lamborghini', engine: 'v12', tagline: 'Twelve cylinders and three electric motors walk into a bar.', colors: ['#c6e000', '#ff6a00', '#151515', '#7a1fa2'], stats: { speed: 9, accel: 9, handling: 7.5, thrusters: 6 } },
+  { id: 'sf90', name: 'Ferrari SF90 Stradale', make: 'Ferrari', engine: 'hybrid-v8', tagline: 'Rosso corsa, plug-in, three motors and a V8 chorus.', colors: ['#d40000', '#ffcc00', '#111111', '#f2f2f2'], stats: { speed: 8.5, accel: 9.5, handling: 8, thrusters: 6 } },
+  { id: 'chiron', name: 'Bugatti Chiron', make: 'Bugatti', engine: 'w16', tagline: 'Sixteen cylinders. Four turbos. Zero chill.', colors: ['#1b3a8a', '#0d0d0d', '#c8c8c8', '#8a1020'], stats: { speed: 10, accel: 8.5, handling: 6.5, thrusters: 5 } },
+  { id: 'nevera', name: 'Rimac Nevera', make: 'Rimac', engine: 'electric', tagline: 'Croatian lightning with four motors and a very calm face.', colors: ['#2e6bb5', '#f2f2f2', '#222222', '#c45a1a'], stats: { speed: 9.5, accel: 10, handling: 7, thrusters: 7 } },
+];
+
+function densify(pts, step = 8, loop = false) {
+  const out = [];
+  const P = loop ? [...pts, pts[0]] : pts;
+  for (let i = 0; i < P.length - 1; i++) {
+    const [ax, az] = P[i], [bx, bz] = P[i + 1];
+    const l = Math.hypot(bx - ax, bz - az), n = Math.max(1, Math.round(l / step));
+    for (let k = 0; k < n; k++) out.push([ax + (bx - ax) * k / n, az + (bz - az) * k / n]);
+  }
+  if (!loop) out.push(P[P.length - 1]);
+  return out;
+}
+function mkTrack(id, name, area, description, laps, loop, raw, difficulty) {
+  const path = densify(raw, 8, loop);
+  let len = 0; for (let i = 1; i < path.length; i++) len += Math.hypot(path[i][0] - path[i - 1][0], path[i][1] - path[i - 1][1]);
+  const checkpoints = [];
+  for (let i = 25; i < path.length; i += 25) checkpoints.push({ x: path[i][0], z: path[i][1], heading: 0, width: 18 });
+  if (!loop) { const e = path[path.length - 1]; checkpoints.push({ x: e[0], z: e[1], heading: 0, width: 18 }); }
+  return { id, name, area, description, laps, loop, path, checkpoints, grid: [], lengthMeters: len, difficulty };
+}
+const zig = []; for (let i = 0; i < 8; i++) zig.push([-1500 + (i % 2 ? 40 : -40), -2300 + i * 22]);
+const TRACKS = [
+  mkTrack('embarcadero', 'Embarcadero Sprint', "Fisherman's Wharf → Oracle Park", 'Waterfront blast past the Ferry Building and under the Bay Bridge to the ballpark.', 1, false, [[-700, -2500], [200, -2350], [900, -1700], [1400, -900], [1600, 0], [1500, 900], [1100, 1700]], 2),
+  mkTrack('lombard', 'Lombard Zigzag', 'Russian Hill', 'Eight hairpins down the crooked block, then claw back up Hyde Street.', 3, true, [[-1600, -2600], [-1100, -2600], [-1100, -2200], ...zig.reverse(), [-1600, -2100]], 4),
+  mkTrack('goldengate', 'Golden Gate Run', 'Marina → Presidio → the Bridge', 'Flat-out along Crissy Field, then across the deck past the north tower.', 1, false, [[-2600, -2500], [-3600, -2700], [-4300, -2900], [-4700, -3400], [-4800, -4300]], 3),
+  mkTrack('nobhill', 'Nob Hill Jumps', 'Nob Hill', 'California, Taylor and Jones: steep crests built for airtime.', 3, true, [[-700, -900], [-300, -900], [-300, -500], [-700, -500], [-700, -700], [-500, -700]], 5),
+  mkTrack('downtown', 'Downtown Grand Prix', 'Financial District', 'Market, Montgomery and Columbus in the shadow of the Transamerica pyramid.', 2, true, [[0, 0], [600, -600], [400, -1300], [-100, -1500], [-200, -700]], 3),
+  mkTrack('ladies', 'Painted Ladies Tour', 'Alamo Square · Panhandle', 'Victorian rows, the Panhandle and a dash to Golden Gate Park.', 2, true, [[-2500, 400], [-1900, 400], [-1900, 900], [-3400, 950], [-3400, 600]], 2),
+];
+
+const roads = [];
+for (let i = -40; i <= 30; i++) {
+  roads.push({ points: [[-6000, i * 110], [3500, i * 110]], width: i % 6 === 0 ? 20 : 10, type: i % 6 === 0 ? 'primary' : i % 3 === 0 ? 'secondary' : 'residential' });
+}
+for (let i = -55; i <= 32; i++) {
+  roads.push({ points: [[i * 110, -4500], [i * 110, 4000]], width: i % 7 === 0 ? 18 : 10, type: i % 7 === 0 ? 'primary' : 'residential' });
+}
+roads.push({ points: [[-3200, 2500], [1500, -1600]], width: 26, type: 'primary', name: 'Market St' });
+roads.push({ points: [[-4800, -3000], [-4800, -4500]], width: 22, type: 'motorway', name: 'Golden Gate Bridge' });
+const LANDMARKS = [[-4800, -3800], [-200, -1450], [300, -1900], [1450, -900], [500, -300], [-1500, -2350], [-2200, 650], [1300, 1600], [-3800, -2700], [100, -2700]].map(([x, z], i) => ({ id: 'l' + i, name: 'Landmark ' + i, x, z, radius: 60 }));
+const WORLD = { bounds: { minX: -6000, maxX: 3500, minZ: -4500, maxZ: 4000 }, roads, landmarks: LANDMARKS, tracks: TRACKS };
+
+const SONGS = [
+  { title: 'Fog City Nights', artist: 'DJ Karl & the Tanpura Bros', station: 'bollywood-fm' },
+  { title: 'Lombard Pe Lattoo', artist: 'Raag Bhairavi Express', station: 'bollywood-fm' },
+  { title: 'Cable Car Chaiyya', artist: 'Mission Street Shehnai', station: 'bollywood-fm' },
+];
+let songI = 0;
+
+// ------------------------------------------------------------ fake background (instead of the 3D canvas)
+const cv = document.getElementById('game'), g = cv.getContext('2d');
+function paintBg() {
+  const w = cv.width = innerWidth, h = cv.height = innerHeight;
+  const sky = g.createLinearGradient(0, 0, 0, h);
+  sky.addColorStop(0, '#0b1630'); sky.addColorStop(0.55, '#1b2a4d'); sky.addColorStop(0.75, '#40324a'); sky.addColorStop(1, '#0b0f1c');
+  g.fillStyle = sky; g.fillRect(0, 0, w, h);
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  for (let x = 0; x < w; x += 18 + rnd() * 30) {
+    const bh = h * (0.12 + rnd() * 0.35), bw = 20 + rnd() * 50;
+    g.fillStyle = `rgba(${8 + rnd() * 10},${12 + rnd() * 10},${26 + rnd() * 18},1)`;
+    g.fillRect(x, h * 0.78 - bh, bw, bh);
+    g.fillStyle = 'rgba(255,200,120,.5)';
+    for (let k = 0; k < 14; k++) if (rnd() > 0.55) g.fillRect(x + 4 + rnd() * (bw - 8), h * 0.78 - bh + 6 + rnd() * (bh - 12), 2, 3);
+  }
+  g.fillStyle = '#070a14'; g.fillRect(0, h * 0.78, w, h);
+  if (ui && ui.screen === 'garage') {
+    // fake turntable + car silhouette in the center/left
+    const cx = innerWidth > 760 ? (w - 420) * 0.5 : w * 0.5, cy = innerWidth > 760 ? h * 0.6 : h * 0.3;
+    const s = Math.min(w, h) / 900;
+    g.fillStyle = 'rgba(255,179,32,.08)'; g.beginPath(); g.ellipse(cx, cy + 70 * s, 360 * s, 70 * s, 0, 0, Math.PI * 2); g.fill();
+    g.fillStyle = ui.selectedCar.color || '#c8102e';
+    g.beginPath(); g.moveTo(cx - 300 * s, cy + 40 * s); g.quadraticCurveTo(cx - 280 * s, cy - 30 * s, cx - 120 * s, cy - 50 * s);
+    g.quadraticCurveTo(cx - 20 * s, cy - 110 * s, cx + 120 * s, cy - 60 * s); g.quadraticCurveTo(cx + 290 * s, cy - 40 * s, cx + 300 * s, cy + 40 * s); g.closePath(); g.fill();
+    g.fillStyle = '#05070d'; for (const dx of [-180, 180]) { g.beginPath(); g.arc(cx + dx * s, cy + 40 * s, 48 * s, 0, Math.PI * 2); g.fill(); }
+  }
+}
+addEventListener('resize', paintBg);
+
+// ------------------------------------------------------------ UI + fake integrator
+const logEl = document.getElementById('log');
+const lines = [];
+const log = (...a) => { lines.push(a.map(x => typeof x === 'object' ? JSON.stringify(x) : String(x)).join(' ')); while (lines.length > 12) lines.shift(); logEl.textContent = lines.join('\n'); };
+let feed = { mode: 'race', t: 0, on: false, track: TRACKS[1] };
+const ui = new UI(document.getElementById('ui'), {
+  onStartRace: o => { log('onStartRace', o); startFeed(o.mode, TRACKS.find(t => t.id === o.trackId)); },
+  onFreeRoam: o => { log('onFreeRoam', o); startFeed('free', TRACKS[4]); },
+  onGarageOpen: () => { log('onGarageOpen'); setTimeout(paintBg); },
+  onGarageCar: (id, c) => { log('onGarageCar', id, c); setTimeout(paintBg); },
+  onGarageClose: () => { log('onGarageClose'); setTimeout(paintBg); },
+  onResume: () => log('onResume'),
+  onRestart: () => { log('onRestart'); startFeed(feed.mode, feed.track); },
+  onQuit: () => { log('onQuit'); feed.on = false; },
+  onSettings: s => log('onSettings', s.quality, s.units, s.master),
+  onRadio: st => { log('onRadio', st); ui.setNowPlaying(st === 'off' ? { title: '', artist: '', station: 'off' } : st === 'my-playlist' ? { title: 'my_song.mp3', artist: 'My Playlist', station: st } : SONGS[songI]); },
+  onNextTrack: () => { songI = (songI + 1) % SONGS.length; ui.setNowPlaying(SONGS[songI]); log('onNextTrack'); },
+  onPrevTrack: () => { songI = (songI + SONGS.length - 1) % SONGS.length; ui.setNowPlaying(SONGS[songI]); log('onPrevTrack'); },
+  onMusicFiles: f => log('onMusicFiles', f.length),
+  onUIClick: () => {},
+  onUIHover: () => {},
+});
+window.ui = ui;
+addEventListener('keydown', e => { if (e.code === 'Escape' && ui.screen === 'hud') ui.show('pause'); });
+
+function startFeed(mode, track) {
+  feed = { mode, t: 0, on: true, track: track || TRACKS[1], cd: 3.99, lastN: 4 };
+  ui.updateHUD({});
+  ui.setMinimapRoute(mode === 'free' ? null : feed.track.path, feed.track.loop);
+}
+function pointAt(path, s) {
+  const i = Math.floor(s) % (path.length - 1), f = s - Math.floor(s);
+  const a = path[i], b = path[i + 1];
+  return { x: a[0] + (b[0] - a[0]) * f, z: a[1] + (b[1] - a[1]) * f, heading: Math.atan2(b[0] - a[0], b[1] - a[1]) };
+}
+let last = performance.now();
+const mm = { player: { x: 0, z: 0, heading: 0 }, rivals: [], checkpoints: [], next: 0, landmarks: [] };
+function tick(now) {
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  if (feed.on && ui.screen === 'hud') {
+    if (feed.cd > -1 && feed.mode !== 'free') {
+      feed.cd -= dt; const n = Math.ceil(feed.cd);
+      if (n !== feed.lastN && n >= 0) { feed.lastN = n; ui.countdown(n); }
+    }
+    feed.t += dt;
+    const t = feed.t;
+    const path = feed.track.path;
+    const s = (t * 4) % (path.length - 1);
+    const p = pointAt(path, s);
+    mm.player.x = p.x; mm.player.z = p.z; mm.player.heading = p.heading;
+    mm.rivals = [1, 2, 3, 4].map(k => { const q = pointAt(path, (s + k * 9 + path.length * 4) % (path.length - 1)); return { x: q.x + 4, z: q.z, heading: q.heading }; });
+    mm.checkpoints = feed.mode === 'free' ? [] : feed.track.checkpoints;
+    mm.next = Math.floor(s / 25) % Math.max(1, feed.track.checkpoints.length);
+    mm.landmarks = feed.mode === 'free' ? LANDMARKS.map((l, i) => ({ x: l.x, z: l.z, found: i < 3 })) : [];
+    const speed = 150 + 110 * Math.sin(t / 2.5);
+    const units = ui.getSettings().units;
+    const cyc = (t * 0.7) % 1;
+    const driftPhase = t % 9;
+    const msgPhase = t % 12;
+    ui.updateHUD({
+      mode: feed.mode, speed: units === 'mph' ? speed * 0.621 : speed, units, gear: 1 + Math.floor(cyc * 6) % 7, rpm: 0.25 + 0.75 * cyc,
+      boost: 0.5 + 0.5 * Math.sin(t / 3), boosting: (t % 7) > 5.5, hovering: (t % 11) > 9.8,
+      lap: 1 + Math.floor(t / 30) % 3, laps: 3, position: 1 + Math.floor(t / 6) % 6, racers: 6,
+      raceTime: t, lapTime: t % 30, bestLap: t > 30 ? 28.734 : null,
+      checkpoint: mm.next, checkpoints: feed.track.checkpoints.length,
+      nextDir: Math.sin(t / 2) * 1.6, nextDist: 240 - (t * 30) % 230,
+      drift: driftPhase > 5 && driftPhase < 8 ? Math.round((driftPhase - 5) * 520) : 0,
+      score: Math.round(t * 137),
+      message: msgPhase > 8 && msgPhase < 9.6 ? 'WRONG WAY' : msgPhase > 3 && msgPhase < 4.5 ? '+250 NEAR MISS' : msgPhase > 10.5 && msgPhase < 11.8 ? 'NEW BEST LAP' : '',
+      landmarksFound: 3, landmarksTotal: LANDMARKS.length,
+    });
+    ui.updateMinimap(mm);
+  }
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+
+// boot: loading -> data -> menu
+let f = 0;
+const msgs = ['Reading the map of San Francisco', 'Raising the hills', 'Painting the Golden Gate', 'Rolling in Karl the Fog', 'Warming up the thrusters'];
+const boot = setInterval(() => {
+  f += 0.07;
+  ui.setLoading(Math.min(1, f), msgs[Math.min(msgs.length - 1, Math.floor(f * msgs.length))]);
+  if (f >= 1) {
+    clearInterval(boot);
+    ui.setCars(CARS); ui.setTracks(TRACKS); ui.setMinimap(WORLD); ui.setSelectedCar('roadster', '#c8102e');
+    ui.setNowPlaying(SONGS[0]);
+    const q = new URLSearchParams(location.search);
+    if (!q.get('hold')) go(q.get('screen') || 'menu');
+  }
+}, 120);
+
+// ------------------------------------------------------------ dev bar
+function go(name) {
+  if (name === 'hud' || name === 'hud-race') { ui._openTracks('race', 'menu'); ui._startRace(); }
+  else if (name === 'hud-free') ui._freeRoam();
+  else if (name === 'hud-trial') { ui._openTracks('trial', 'menu'); ui._startRace(); }
+  else if (name === 'pause') { if (ui.screen !== 'hud') { ui._openTracks('race', 'menu'); ui._startRace(); } feed.t = 20; feed.cd = -2; ui.show('pause'); }
+  else if (name === 'results') {
+    ui.showResults({ trackName: 'Lombard Zigzag', position: 2, time: 154.321, bestLap: 49.877, score: 18450, racers: 6, mode: 'race',
+      standings: [
+        { name: 'Simran', car: 'Ferrari SF90 Stradale', time: 152.004, isPlayer: false },
+        { name: 'You', car: 'Tesla Roadster', time: 154.321, isPlayer: true },
+        { name: 'Kabir', car: 'Bugatti Chiron', time: 156.9, isPlayer: false },
+        { name: 'Basanti', car: 'Porsche 911 GT3 RS', time: 158.12, isPlayer: false },
+        { name: 'Rancho', car: 'Rimac Nevera', time: 161.5, isPlayer: false },
+        { name: 'Geet', car: 'McLaren 720S', time: 170.77, isPlayer: false },
+      ] });
+  }
+  else if (['settings', 'controls', 'radio'].includes(name)) ui._openOverlay(name);
+  else if (name === 'garage') ui._openGarage('menu');
+  else if (name === 'tracks') ui._openTracks('race', 'menu');
+  else ui.show(name);
+  setTimeout(paintBg);
+}
+window.go = go;
+window.feed = () => feed;
+const dev = document.getElementById('dev');
+const B = (label, fn) => { const b = document.createElement('button'); b.textContent = label; b.onclick = fn; dev.append(b); return b; };
+B('hide bar', () => dev.classList.toggle('hide')).id = 'devToggle';
+for (const s of ['loading', 'menu', 'garage', 'tracks', 'hud-race', 'hud-trial', 'hud-free', 'pause', 'results', 'settings', 'controls', 'radio']) B(s, () => go(s));
+B('countdown', () => { feed.cd = 3.99; feed.lastN = 4; });
+B('toast info', () => ui.toast('Camera: far', 'info', 1500));
+B('toast discover', () => ui.toast('Discovered Coit Tower · Telegraph Hill’s concrete fire-nozzle', 'discover', 4000));
+B('toast music', () => ui.toast('Fog City Nights · DJ Karl', 'music', 3000));
+B('toast warn', () => ui.toast('Thrusters empty', 'warn', 2000));
+B('touch on/off', () => ui.setTouchMode(!ui.touchMode));
+B('next song', () => { songI = (songI + 1) % SONGS.length; ui.setNowPlaying(SONGS[songI]); });
+B('clean', () => document.body.classList.add('clean'));
+paintBg();
+</script>
+</body>
+</html>

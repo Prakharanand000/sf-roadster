@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Audio Test Bench</title>
+<style>
+  :root { --bg:#14121a; --panel:#1f1c28; --fg:#eee; --mut:#9a96a8; --acc:#ff9f1c; --ok:#4cd07d; --bad:#ff5a5f; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--fg); font:14px/1.4 system-ui, sans-serif; }
+  h1 { font-size:20px; margin:0 0 12px; } h2 { font-size:15px; margin:0 0 8px; color:var(--acc); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:12px; }
+  section { background:var(--panel); border-radius:10px; padding:12px; }
+  button { background:#2c2838; color:var(--fg); border:1px solid #3d3850; border-radius:6px; padding:6px 10px; margin:2px; cursor:pointer; }
+  button:hover { border-color:var(--acc); } button.on { background:var(--acc); color:#111; }
+  label { display:flex; align-items:center; gap:8px; margin:4px 0; } label span { min-width:90px; color:var(--mut); }
+  input[type=range] { flex:1; } .val { min-width:44px; text-align:right; font-variant-numeric:tabular-nums; }
+  #np { font-size:16px; padding:8px; background:#0e0c13; border-radius:6px; min-height:44px; }
+  #np small { color:var(--mut); display:block; }
+  table { border-collapse:collapse; width:100%; font-variant-numeric:tabular-nums; font-size:12px; }
+  td, th { padding:3px 6px; border-bottom:1px solid #2c2838; text-align:left; }
+  .ok { color:var(--ok); } .bad { color:var(--bad); }
+  #songs { max-height:260px; overflow:auto; }
+  #log { font:12px monospace; color:var(--mut); white-space:pre-wrap; max-height:140px; overflow:auto; }
+</style>
+</head>
+<body>
+<h1>SF Roadster Rush - Audio test bench</h1>
+<p><button id="unlock">Unlock audio</button> <span id="state">locked</span></p>
+<div class="grid">
+  <section>
+    <h2>Engine</h2>
+    <div id="profiles"></div>
+    <label><input type="checkbox" id="engOn"> drive (call updateEngine every frame)</label>
+    <label><input type="checkbox" id="sweep"> auto rev sweep (accelerate through gears, lift, repeat)</label>
+    <label><span>rpm</span><input type="range" id="rpm" min="0" max="1" step="0.001" value="0.1"><b class="val" id="rpmV"></b></label>
+    <label><span>throttle</span><input type="range" id="thr" min="0" max="1" step="0.01" value="0"><b class="val" id="thrV"></b></label>
+    <label><span>speed m/s</span><input type="range" id="spd" min="0" max="110" step="0.5" value="0"><b class="val" id="spdV"></b></label>
+    <label><span>slip</span><input type="range" id="slip" min="0" max="1" step="0.01" value="0"><b class="val" id="slipV"></b></label>
+    <label><input type="checkbox" id="boost"> boosting <input type="checkbox" id="hover"> hovering <input type="checkbox" id="ground" checked> onGround <input type="checkbox" id="water"> inWater</label>
+    <button id="gearBtn">gear shift</button> <span id="gearV"></span>
+  </section>
+  <section>
+    <h2>SFX</h2>
+    <label><span>intensity</span><input type="range" id="inten" min="0" max="1" step="0.01" value="0.8"><b class="val" id="intenV"></b></label>
+    <div id="sfx"></div>
+  </section>
+  <section>
+    <h2>Radio</h2>
+    <div><button data-st="bollywood-fm">Bollywood FM</button><button data-st="my-playlist">My Playlist</button><button data-st="off">Off</button>
+      <button id="prev">prev</button><button id="next">next</button></div>
+    <div id="np">-</div>
+    <label><span>my songs</span><input type="file" id="files" accept="audio/*" multiple></label>
+    <label><span>master</span><input type="range" id="vMaster" min="0" max="1" step="0.01" value="0.85"></label>
+    <label><span>music</span><input type="range" id="vMusic" min="0" max="1" step="0.01" value="0.6"></label>
+    <label><span>sfx</span><input type="range" id="vSfx" min="0" max="1" step="0.01" value="0.9"></label>
+    <label><span>duck</span><input type="range" id="duck" min="0" max="1" step="0.01" value="0"></label>
+    <label><input type="checkbox" id="paused"> setPaused</label>
+    <div>Section: <select id="section"><option value="">(start)</option><option>verse</option><option>chorus</option><option>break</option><option>build</option><option>drop</option><option>outro</option></select></div>
+    <div id="songs"></div>
+  </section>
+  <section>
+    <h2>Offline render test</h2>
+    <p>Renders each engine profile (sweep with lift-offs, boost, slip) and song sections into an OfflineAudioContext and reports levels.</p>
+    <button id="offline">Run offline tests</button> <span id="offState"></span>
+    <table id="offTable"><thead><tr><th>case</th><th>RMS</th><th>peak</th><th>silent %</th><th>x realtime</th><th></th></tr></thead><tbody></tbody></table>
+  </section>
+</div>
+<h2 style="margin-top:12px">Log</h2>
+<div id="log"></div>
+<script type="module" src="./audio-test.js"></script>
+</body>
+</html>

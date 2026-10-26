@@ -1,0 +1,31 @@
+  bld_0_0: 9958 elements, 13.3 MB (https://overpass-api.de/api/interpreter)
+curl: (22) The requested URL returned error: 502
+  bld_0_1 attempt 0 failed on https://overpass-api.de/api/interpreter: Command '['curl', '-s', '-S', '-f', '-A', 'SFRoadsterRush/1.0 (personal game build)', '--max-time', '400', '--data-urlencode', 'data@C:\\Users\\prakh\\AppData\\Local\\Claude-Data\\claude_pzs8sxrjxfjjc\\scratch-workspaces\\550d7848-e91e-46c8-95c8-f6eeceb023ad\\89d809cb-30d6-429b-9c26-c475345a227e\\scratch-2026-10-26-84457b\\sf-roadster\\tools\\cache\\query_bld_0_1.txt', '-o', 'C:\\Users\\prakh\\AppData\\Local\\Claude-Data\\claude_pzs8sxrjxfjjc\\scratch-workspaces\\550d7848-e91e-46c8-95c8-f6eeceb023ad\\89d809cb-30d6-429b-9c26-c475345a227e\\scratch-2026-10-26-84457b\\sf-roadster\\tools\\cache\\osm_bld_0_1.json.part', 'https://overpass-api.de/api/interpreter']' returned non-zero exit status 22.
+curl: (22) The requested URL returned error: 504
+  bld_0_1 attempt 1 failed on https://overpass.kumi.systems/api/interpreter: Command '['curl', '-s', '-S', '-f', '-A', 'SFRoadsterRush/1.0 (personal game build)', '--max-time', '400', '--data-urlencode', 'data@C:\\Users\\prakh\\AppData\\Local\\Claude-Data\\claude_pzs8sxrjxfjjc\\scratch-workspaces\\550d7848-e91e-46c8-95c8-f6eeceb023ad\\89d809cb-30d6-429b-9c26-c475345a227e\\scratch-2026-10-26-84457b\\sf-roadster\\tools\\cache\\query_bld_0_1.txt', '-o', 'C:\\Users\\prakh\\AppData\\Local\\Claude-Data\\claude_pzs8sxrjxfjjc\\scratch-workspaces\\550d7848-e91e-46c8-95c8-f6eeceb023ad\\89d809cb-30d6-429b-9c26-c475345a227e\\scratch-2026-10-26-84457b\\sf-roadster\\tools\\cache\\osm_bld_0_1.json.part', 'https://overpass.kumi.systems/api/interpreter']' returned non-zero exit status 22.
+  bld_0_1: 9785 elements, 13.0 MB (https://overpass-api.de/api/interpreter)
+curl: (22) The requested URL returned error: 502
+  bld_0_2 attempt 0 failed on https://overpass-api.de/api/interpreter: Command '['curl', '-s', '-S', '-f', '-A', 'SFRoadsterRush/1.0 (personal game build)', '--max-time', '400', '--data-urlencode', 'data@C:\\Users\\prakh\\AppData\\Local\\Claude-Data\\claude_pzs8sxrjxfjjc\\scratch-workspaces\\550d7848-e91e-46c8-95c8-f6eeceb023ad\\89d809cb-30d6-429b-9c26-c475345a227e\\scratch-2026-10-26-84457b\\sf-roadster\\tools\\cache\\query_bld_0_2.txt', '-o', 'C:\\Users\\prakh\\AppData\\Local\\Claude-Data\\claude_pzs8sxrjxfjjc\\scratch-workspaces\\550d7848-e91e-46c8-95c8-f6eeceb023ad\\89d809cb-30d6-429b-9c26-c475345a227e\\scratch-2026-10-26-84457b\\sf-roadster\\tools\\cache\\osm_bld_0_2.json.part', 'https://overpass-api.de/api/interpreter']' returned non-zero exit status 22.
+curl: (22) The requested URL returned error: 504
+  bld_0_2 attempt 1 failed on https://overpass.kumi.systems/api/interpreter: Command '['curl', '-s', '-S', '-f', '-A', 'SFRoadsterRush/1.0 (personal game build)', '--max-time', '400', '--data-urlencode', 'data@C:\\Users\\prakh\\AppData\\Local\\Claude-Data\\claude_pzs8sxrjxfjjc\\scratch-workspaces\\550d7848-e91e-46c8-95c8-f6eeceb023ad\\89d809cb-30d6-429b-9c26-c475345a227e\\scratch-2026-10-26-84457b\\sf-roadster\\tools\\cache\\query_bld_0_2.txt', '-o', 'C:\\Users\\prakh\\AppData\\Local\\Claude-Data\\claude_pzs8sxrjxfjjc\\scratch-workspaces\\550d7848-e91e-46c8-95c8-f6eeceb023ad\\89d809cb-30d6-429b-9c26-c475345a227e\\scratch-2026-10-26-84457b\\sf-roadster\\tools\\cache\\osm_bld_0_2.json.part', 'https://overpass.kumi.systems/api/interpreter']' returned non-zero exit status 22.
+  bld_0_2: 5911 elements, 6.7 MB (https://overpass-api.de/api/interpreter)
+curl: (22) The requested URL returned error: 502
+  bld_0_3 attempt 0 failed on https://overpass-api.de/api/interpreter: Command '['curl', '-s', '-S', '-f', '-A', 'SFRoadsterRush/1.0 (personal game build)', '--max-time', '400', '--data-urlencode', 'data@C:\\Users\\prakh\\AppData\\Local\\Claude-Data\\claude_pzs8sxrjxfjjc\\scratch-workspaces\\550d7848-e91e-46c8-95c8-f6eeceb023ad\\89d809cb-30d6-429b-9c26-c475345a227e\\scratch-2026-10-26-84457b\\sf-roadster\\tools\\cache\\query_bld_0_3.txt', '-o', 'C:\\Users\\prakh\\AppData\\Local\\Claude-Data\\claude_pzs8sxrjxfjjc\\scratch-workspaces\\550d7848-e91e-46c8-95c8-f6eeceb023ad\\89d809cb-30d6-429b-9c26-c475345a227e\\scratch-2026-10-26-84457b\\sf-roadster\\tools\\cache\\osm_bld_0_3.json.part', 'https://overpass-api.de/api/interpreter']' returned non-zero exit status 22.
+curl: (22) The requested URL returned error: 504
+  bld_0_3 attempt 1 failed on https://overpass.kumi.systems/api/interpreter: Command '['curl', '-s', '-S', '-f', '-A', 'SFRoadsterRush/1.0 (personal game build)', '--max-time', '400', '--data-urlencode', 'data@C:\\Users\\prakh\\AppData\\Local\\Claude-Data\\claude_pzs8sxrjxfjjc\\scratch-workspaces\\550d7848-e91e-46c8-95c8-f6eeceb023ad\\89d809cb-30d6-429b-9c26-c475345a227e\\scratch-2026-10-26-84457b\\sf-roadster\\tools\\cache\\query_bld_0_3.txt', '-o', 'C:\\Users\\prakh\\AppData\\Local\\Claude-Data\\claude_pzs8sxrjxfjjc\\scratch-workspaces\\550d7848-e91e-46c8-95c8-f6eeceb023ad\\89d809cb-30d6-429b-9c26-c475345a227e\\scratch-2026-10-26-84457b\\sf-roadster\\tools\\cache\\osm_bld_0_3.json.part', 'https://overpass.kumi.systems/api/interpreter']' returned non-zero exit status 22.
+  bld_0_3: 1013 elements, 1.1 MB (https://overpass-api.de/api/interpreter)
+  bld_1_0: 842 elements, 1.0 MB (https://overpass-api.de/api/interpreter)
+  bld_1_1: 6709 elements, 9.1 MB (https://overpass-api.de/api/interpreter)
+  bld_1_2: 9356 elements, 11.2 MB (https://overpass-api.de/api/interpreter)
+  bld_1_3: 504 elements, 0.6 MB (https://overpass-api.de/api/interpreter)
+  bld_2_0: 24 elements, 0.0 MB (https://overpass-api.de/api/interpreter)
+  bld_2_1: 0 elements, 0.0 MB (https://overpass-api.de/api/interpreter)
+  bld_2_2: 50 elements, 0.1 MB (https://overpass-api.de/api/interpreter)
+  bld_2_3: 152 elements, 0.2 MB (https://overpass-api.de/api/interpreter)
+  roads: 11004 elements, 9.3 MB (https://overpass-api.de/api/interpreter)
+  bridges: 561 elements, 0.6 MB (https://overpass-api.de/api/interpreter)
+  landuse: 4147 elements, 5.1 MB (https://overpass-api.de/api/interpreter)
+  coast: 104 elements, 0.4 MB (https://overpass-api.de/api/interpreter)
+  trees: 5741 elements, 0.5 MB (https://overpass-api.de/api/interpreter)
+  misc: 423 elements, 0.9 MB (https://overpass-api.de/api/interpreter)
+done

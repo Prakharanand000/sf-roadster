@@ -1,0 +1,1 @@
+[out:json][timeout:200];(way["railway"~"^(tram|cable_car|light_rail)$"](37.76500,-122.49000,37.83200,-122.37200);nwr["name"~"Transamerica|Salesforce Tower|Coit Tower|Ferry Building|Palace of Fine Arts|City Hall|Alcatraz|Pier 39|Oracle Park|Ghirardelli|Dragon Gate|Golden Gate Bridge|Painted Ladies|Fort Point"](37.76000,-122.50000,37.84000,-122.36000););out geom;
