@@ -83,11 +83,8 @@ export function treeGeometries() {
   return [merge([t0, c0]), merge([t1, c1a, c1b]), merge([t2, ...fronds]), merge([t3, c3])];
 }
 
-export function buildTrees(D, Q, { quality = 'high', uniforms } = {}) {
-  const T = D.trees;
-  const n = T.type.length;
-  const frac = quality === 'high' ? 1 : quality === 'medium' ? 0.6 : 0.3;
-  const geos = treeGeometries();
+/** Tree material (instanced, wind sway from uniforms.uTime). */
+export function createTreeMaterial(uniforms) {
   const mat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.9, metalness: 0, side: THREE.FrontSide });
   mat.onBeforeCompile = (sh) => {
     sh.uniforms.uTime = uniforms.uTime;
@@ -101,6 +98,16 @@ export function buildTrees(D, Q, { quality = 'high', uniforms } = {}) {
 #endif`);
   };
   mat.customProgramCacheKey = () => 'sf-tree-v1';
+  return mat;
+}
+
+/** `material` / `geos` reuse a shared tree material and geometries (the v2 world builds one set per tile). */
+export function buildTrees(D, Q, { quality = 'high', uniforms, material, geos: sharedGeos } = {}) {
+  const T = D.trees;
+  const n = T.type.length;
+  const frac = quality === 'high' ? 1 : quality === 'medium' ? 0.6 : 0.3;
+  const geos = sharedGeos || treeGeometries();
+  const mat = material || createTreeMaterial(uniforms);
   // bucket by chunk & type
   const buckets = new Map();
   let used = 0;

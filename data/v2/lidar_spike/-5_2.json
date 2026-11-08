@@ -1,0 +1,98 @@
+{
+ "version": 1,
+ "attribution": "Ground and roads: USGS 3DEP lidar CA_SanFrancisco_1_B23 (public domain); road centrelines (c) OpenStreetMap contributors (ODbL)",
+ "bbox": {
+  "x0": -2560.0,
+  "z0": 1024.0,
+  "x1": -2048.0,
+  "z1": 1536.0
+ },
+ "feather": 24.0,
+ "grid": {
+  "x0": -2560.0,
+  "z0": 1024.0,
+  "cell": 2.0,
+  "nx": 257,
+  "nz": 257,
+  "hBase": 30.0
+ },
+ "knots": 7,
+ "bevel": 0.25,
+ "world": {
+  "roads": 45561,
+  "buildings": 3487,
+  "roadsHash": 8247271
+ },
+ "counts": {
+  "stations": 2295,
+  "runs": 44
+ },
+ "arrays": {
+  "grid": {
+   "offset": 0,
+   "length": 66049,
+   "type": "uint16"
+  },
+  "st_xz": {
+   "offset": 132100,
+   "length": 4590,
+   "type": "float32"
+  },
+  "st_off": {
+   "offset": 150460,
+   "length": 16065,
+   "type": "int16"
+  },
+  "st_h": {
+   "offset": 182592,
+   "length": 16065,
+   "type": "uint16"
+  },
+  "st_jd": {
+   "offset": 214724,
+   "length": 2295,
+   "type": "int16"
+  },
+  "st_n": {
+   "offset": 219316,
+   "length": 4590,
+   "type": "float32"
+  },
+  "run_start": {
+   "offset": 237676,
+   "length": 44,
+   "type": "uint32"
+  },
+  "run_count": {
+   "offset": 237852,
+   "length": 44,
+   "type": "uint32"
+  },
+  "run_road": {
+   "offset": 238028,
+   "length": 44,
+   "type": "uint32"
+  },
+  "run_flags": {
+   "offset": 238204,
+   "length": 44,
+   "type": "uint8"
+  }
+ },
+ "stats": {
+  "island": "B"
+ },
+ "tile": [
+  -5,
+  2
+ ],
+ "cover": [
+  [
+   -5,
+   2
+  ]
+ ],
+ "island": "B",
+ "tileHash": 628552020,
+ "tileHashRoads": 57
+}

@@ -1,0 +1,3771 @@
+{
+ "osm_data_timestamp": "2026-10-25T21:21:21Z",
+ "status_counts": {
+  "close_(<=0.5pct_or_3)": 28,
+  "exact": 256,
+  "differs": 8,
+  "outside_old_range": 7,
+  "old_value_unconfirmed_or_absent": 12,
+  "not_comparable": 4,
+  "within_old_range": 12
+ },
+ "note": "new_bbox = recount over the same rectangle the old note used (any-vertex rule); new_city_polygon = recount inside the OSM admin polygon (midpoint rule). Line numbers are the notes as they stood on 2026-10-26.",
+ "entries": [
+  {
+   "file_line": "tools/research/osm-completeness.md:28",
+   "what": "building=* features (nwr): SF",
+   "old": 170039,
+   "new_bbox": 170024,
+   "new_city_polygon": 161529,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -15,
+   "also_at_lines": [
+    40,
+    180,
+    204
+   ]
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:28",
+   "what": "building=* features (nwr): Oakland",
+   "old": 179703,
+   "new_bbox": 179702,
+   "new_city_polygon": 139697,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -1
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:28",
+   "what": "building=* features (nwr): Emeryville",
+   "old": 4817,
+   "new_bbox": 4817,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:28",
+   "what": "building=* features (nwr): Berkeley",
+   "old": 54297,
+   "new_bbox": 54295,
+   "new_city_polygon": 35820,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -2
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:29",
+   "what": "buildings with height: SF",
+   "old": 142420,
+   "new_bbox": 142417,
+   "new_city_polygon": 139822,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -3,
+   "also_at_lines": [
+    195,
+    204
+   ]
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:29",
+   "what": "buildings with height: Oakland",
+   "old": 155,
+   "new_bbox": 155,
+   "new_city_polygon": 146,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:29",
+   "what": "buildings with height: Emeryville",
+   "old": 14,
+   "new_bbox": 14,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:29",
+   "what": "buildings with height: Berkeley",
+   "old": 35,
+   "new_bbox": 35,
+   "new_city_polygon": 15,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:30",
+   "what": "buildings with building:levels: SF",
+   "old": 3239,
+   "new_bbox": 3238,
+   "new_city_polygon": 3215,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -1
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:30",
+   "what": "buildings with building:levels: Oakland",
+   "old": 1486,
+   "new_bbox": 1486,
+   "new_city_polygon": 1381,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:30",
+   "what": "buildings with building:levels: Emeryville",
+   "old": 146,
+   "new_bbox": 146,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:30",
+   "what": "buildings with building:levels: Berkeley",
+   "old": 1997,
+   "new_bbox": 1997,
+   "new_city_polygon": 1761,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:31",
+   "what": "buildings with roof:shape: SF",
+   "old": 320,
+   "new_bbox": 320,
+   "new_city_polygon": 315,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:31",
+   "what": "buildings with roof:shape: Oakland",
+   "old": 111,
+   "new_bbox": 111,
+   "new_city_polygon": 112,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:31",
+   "what": "buildings with roof:shape: Emeryville",
+   "old": 7,
+   "new_bbox": 7,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:31",
+   "what": "buildings with roof:shape: Berkeley",
+   "old": 242,
+   "new_bbox": 242,
+   "new_city_polygon": 221,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:32",
+   "what": "buildings with roof:height: SF",
+   "old": 40,
+   "new_bbox": 40,
+   "new_city_polygon": 40,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:32",
+   "what": "buildings with roof:height: Oakland",
+   "old": 32,
+   "new_bbox": 32,
+   "new_city_polygon": 32,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:32",
+   "what": "buildings with roof:height: Emeryville",
+   "old": 1,
+   "new_bbox": 1,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:32",
+   "what": "buildings with roof:height: Berkeley",
+   "old": 1,
+   "new_bbox": 1,
+   "new_city_polygon": 0,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:33",
+   "what": "buildings with min_height: SF",
+   "old": 12,
+   "new_bbox": 12,
+   "new_city_polygon": 12,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:33",
+   "what": "buildings with min_height: Oakland",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:33",
+   "what": "buildings with min_height: Emeryville",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:33",
+   "what": "buildings with min_height: Berkeley",
+   "old": 2,
+   "new_bbox": 2,
+   "new_city_polygon": 2,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:34",
+   "what": "buildings with name: SF",
+   "old": 3422,
+   "new_bbox": 3416,
+   "new_city_polygon": 3331,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -6
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:34",
+   "what": "buildings with name: Oakland",
+   "old": 2351,
+   "new_bbox": 2350,
+   "new_city_polygon": 2047,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -1
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:34",
+   "what": "buildings with name: Emeryville",
+   "old": 101,
+   "new_bbox": 101,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:34",
+   "what": "buildings with name: Berkeley",
+   "old": 1086,
+   "new_bbox": 1085,
+   "new_city_polygon": 925,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -1
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:35",
+   "what": "building:part features: SF",
+   "old": 1688,
+   "new_bbox": 1686,
+   "new_city_polygon": 1665,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -2,
+   "also_at_lines": [
+    43,
+    184
+   ]
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:35",
+   "what": "building:part features: Oakland",
+   "old": 561,
+   "new_bbox": 561,
+   "new_city_polygon": 498,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:35",
+   "what": "building:part features: Emeryville",
+   "old": 196,
+   "new_bbox": 196,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:35",
+   "what": "building:part features: Berkeley",
+   "old": 126,
+   "new_bbox": 126,
+   "new_city_polygon": 117,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:36",
+   "what": "building:part with height: SF",
+   "old": 979,
+   "new_bbox": 978,
+   "new_city_polygon": 959,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -1
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:36",
+   "what": "building:part with height: Oakland",
+   "old": 235,
+   "new_bbox": 235,
+   "new_city_polygon": 234,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:36",
+   "what": "building:part with height: Emeryville",
+   "old": 2,
+   "new_bbox": 2,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:36",
+   "what": "building:part with height: Berkeley",
+   "old": 8,
+   "new_bbox": 8,
+   "new_city_polygon": 8,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:37",
+   "what": "building:part with building:levels: SF",
+   "old": 665,
+   "new_bbox": 665,
+   "new_city_polygon": 665,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:37",
+   "what": "building:part with building:levels: Oakland",
+   "old": 301,
+   "new_bbox": 301,
+   "new_city_polygon": 270,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:37",
+   "what": "building:part with building:levels: Emeryville",
+   "old": 187,
+   "new_bbox": 187,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:37",
+   "what": "building:part with building:levels: Berkeley",
+   "old": 94,
+   "new_bbox": 94,
+   "new_city_polygon": 88,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:52",
+   "what": "road ways (drivable non-service): SF",
+   "old": 15007,
+   "new_bbox": 15007,
+   "new_city_polygon": 14190,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:52",
+   "what": "road ways (drivable non-service): Oakland",
+   "old": 14797,
+   "new_bbox": 14797,
+   "new_city_polygon": 11332,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:52",
+   "what": "road ways (drivable non-service): Emeryville",
+   "old": 855,
+   "new_bbox": 855,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:52",
+   "what": "road ways (drivable non-service): Berkeley",
+   "old": 4487,
+   "new_bbox": 4487,
+   "new_city_polygon": 2984,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:53",
+   "what": "road ways with lanes: SF",
+   "old": 8400,
+   "new_bbox": 8400,
+   "new_city_polygon": 8011,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:53",
+   "what": "road ways with lanes: Oakland",
+   "old": 7574,
+   "new_bbox": 7571,
+   "new_city_polygon": 5940,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -3
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:53",
+   "what": "road ways with lanes: Emeryville",
+   "old": 458,
+   "new_bbox": 455,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -3
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:53",
+   "what": "road ways with lanes: Berkeley",
+   "old": 2739,
+   "new_bbox": 2739,
+   "new_city_polygon": 1959,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:54",
+   "what": "road ways with width: SF",
+   "old": 44,
+   "new_bbox": 44,
+   "new_city_polygon": 43,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:54",
+   "what": "road ways with width: Oakland",
+   "old": 4,
+   "new_bbox": 4,
+   "new_city_polygon": 3,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:54",
+   "what": "road ways with width: Emeryville",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:54",
+   "what": "road ways with width: Berkeley",
+   "old": 15,
+   "new_bbox": 15,
+   "new_city_polygon": 15,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:55",
+   "what": "road ways with maxspeed: SF",
+   "old": 5781,
+   "new_bbox": 5781,
+   "new_city_polygon": 5597,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:55",
+   "what": "road ways with maxspeed: Oakland",
+   "old": 2779,
+   "new_bbox": 2779,
+   "new_city_polygon": 2560,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:55",
+   "what": "road ways with maxspeed: Emeryville",
+   "old": 444,
+   "new_bbox": 444,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:55",
+   "what": "road ways with maxspeed: Berkeley",
+   "old": 3376,
+   "new_bbox": 3376,
+   "new_city_polygon": 2792,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:56",
+   "what": "road ways with surface: SF",
+   "old": 8806,
+   "new_bbox": 8802,
+   "new_city_polygon": 8581,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -4
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:56",
+   "what": "road ways with surface: Oakland",
+   "old": 5674,
+   "new_bbox": 5673,
+   "new_city_polygon": 5169,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -1
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:56",
+   "what": "road ways with surface: Emeryville",
+   "old": 555,
+   "new_bbox": 554,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -1
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:56",
+   "what": "road ways with surface: Berkeley",
+   "old": 4009,
+   "new_bbox": 4009,
+   "new_city_polygon": 2869,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:57",
+   "what": "road ways with sidewalk_any: SF",
+   "old": 9198,
+   "new_bbox": 9198,
+   "new_city_polygon": 8933,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:57",
+   "what": "road ways with sidewalk_any: Oakland",
+   "old": 8111,
+   "new_bbox": 8111,
+   "new_city_polygon": 6954,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:57",
+   "what": "road ways with sidewalk_any: Emeryville",
+   "old": 531,
+   "new_bbox": 531,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:57",
+   "what": "road ways with sidewalk_any: Berkeley",
+   "old": 4070,
+   "new_bbox": 4070,
+   "new_city_polygon": 2898,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:58",
+   "what": "road ways with cycleway_any: SF",
+   "old": 5725,
+   "new_bbox": 5724,
+   "new_city_polygon": 5548,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -1
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:58",
+   "what": "road ways with cycleway_any: Oakland",
+   "old": 4376,
+   "new_bbox": 4369,
+   "new_city_polygon": 3432,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -7
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:58",
+   "what": "road ways with cycleway_any: Emeryville",
+   "old": 388,
+   "new_bbox": 381,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "differs",
+   "delta_bbox": -7
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:58",
+   "what": "road ways with cycleway_any: Berkeley",
+   "old": 2066,
+   "new_bbox": 2066,
+   "new_city_polygon": 1567,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:59",
+   "what": "road ways with turn_lanes_any: SF",
+   "old": 2268,
+   "new_bbox": 2268,
+   "new_city_polygon": 2113,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:59",
+   "what": "road ways with turn_lanes_any: Oakland",
+   "old": 3081,
+   "new_bbox": 3081,
+   "new_city_polygon": 2204,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:59",
+   "what": "road ways with turn_lanes_any: Emeryville",
+   "old": 227,
+   "new_bbox": 227,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:59",
+   "what": "road ways with turn_lanes_any: Berkeley",
+   "old": 613,
+   "new_bbox": 613,
+   "new_city_polygon": 412,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:60",
+   "what": "road ways with layer: SF",
+   "old": 374,
+   "new_bbox": 374,
+   "new_city_polygon": 349,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:60",
+   "what": "road ways with layer: Oakland",
+   "old": 478,
+   "new_bbox": 478,
+   "new_city_polygon": 471,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:60",
+   "what": "road ways with layer: Emeryville",
+   "old": 29,
+   "new_bbox": 29,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:60",
+   "what": "road ways with layer: Berkeley",
+   "old": 71,
+   "new_bbox": 71,
+   "new_city_polygon": 21,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:61",
+   "what": "road ways with incline: SF",
+   "old": 19,
+   "new_bbox": 19,
+   "new_city_polygon": 17,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:61",
+   "what": "road ways with incline: Oakland",
+   "old": 3,
+   "new_bbox": 3,
+   "new_city_polygon": 3,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:61",
+   "what": "road ways with incline: Emeryville",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:61",
+   "what": "road ways with incline: Berkeley",
+   "old": 6,
+   "new_bbox": 6,
+   "new_city_polygon": 6,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:62",
+   "what": "road ways with oneway_any: SF",
+   "old": 7439,
+   "new_bbox": 7439,
+   "new_city_polygon": 7043,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:62",
+   "what": "road ways with oneway_any: Oakland",
+   "old": 6279,
+   "new_bbox": 6279,
+   "new_city_polygon": 5268,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:62",
+   "what": "road ways with oneway_any: Emeryville",
+   "old": 465,
+   "new_bbox": 465,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:62",
+   "what": "road ways with oneway_any: Berkeley",
+   "old": 2036,
+   "new_bbox": 2036,
+   "new_city_polygon": 1367,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:63",
+   "what": "road ways with oneway_yes: SF",
+   "old": 6758,
+   "new_bbox": 6758,
+   "new_city_polygon": 6368,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:63",
+   "what": "road ways with oneway_yes: Oakland",
+   "old": 5990,
+   "new_bbox": 5990,
+   "new_city_polygon": 5031,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:63",
+   "what": "road ways with oneway_yes: Emeryville",
+   "old": 445,
+   "new_bbox": 445,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:63",
+   "what": "road ways with oneway_yes: Berkeley",
+   "old": 1512,
+   "new_bbox": 1512,
+   "new_city_polygon": 992,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:64",
+   "what": "road ways with lit: SF",
+   "old": 4934,
+   "new_bbox": 4934,
+   "new_city_polygon": 4834,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:64",
+   "what": "road ways with lit: Oakland",
+   "old": 839,
+   "new_bbox": 839,
+   "new_city_polygon": 655,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:64",
+   "what": "road ways with lit: Emeryville",
+   "old": 57,
+   "new_bbox": 57,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:64",
+   "what": "road ways with lit: Berkeley",
+   "old": 626,
+   "new_bbox": 626,
+   "new_city_polygon": 470,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:65",
+   "what": "road ways with name: SF",
+   "old": 13976,
+   "new_bbox": 13976,
+   "new_city_polygon": 13240,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:65",
+   "what": "road ways with name: Oakland",
+   "old": 13558,
+   "new_bbox": 13558,
+   "new_city_polygon": 10263,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:65",
+   "what": "road ways with name: Emeryville",
+   "old": 772,
+   "new_bbox": 772,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:65",
+   "what": "road ways with name: Berkeley",
+   "old": 4197,
+   "new_bbox": 4197,
+   "new_city_polygon": 2837,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:83",
+   "what": "all highway=* ways: SF",
+   "old": 68188,
+   "new_bbox": 68188,
+   "new_city_polygon": 65721,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:83",
+   "what": "all highway=* ways: Oakland",
+   "old": 47889,
+   "new_bbox": 47889,
+   "new_city_polygon": 35465,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:83",
+   "what": "all highway=* ways: Emeryville",
+   "old": 2922,
+   "new_bbox": 2920,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -2
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:83",
+   "what": "all highway=* ways: Berkeley",
+   "old": 17164,
+   "new_bbox": 17161,
+   "new_city_polygon": 12535,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -3
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:84",
+   "what": "highway=service ways: SF",
+   "old": 9015,
+   "new_bbox": 9015,
+   "new_city_polygon": 8355,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:84",
+   "what": "highway=service ways: Oakland",
+   "old": 17048,
+   "new_bbox": 17048,
+   "new_city_polygon": 11470,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:84",
+   "what": "highway=service ways: Emeryville",
+   "old": 944,
+   "new_bbox": 942,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -2
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:84",
+   "what": "highway=service ways: Berkeley",
+   "old": 4534,
+   "new_bbox": 4531,
+   "new_city_polygon": 3131,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -3
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:85",
+   "what": "highway=footway ways: SF",
+   "old": 38848,
+   "new_bbox": 38848,
+   "new_city_polygon": 38083,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0,
+   "also_at_lines": [
+    74,
+    175
+   ]
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:85",
+   "what": "highway=footway ways: Oakland",
+   "old": 13413,
+   "new_bbox": 13413,
+   "new_city_polygon": 10620,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:85",
+   "what": "highway=footway ways: Emeryville",
+   "old": 958,
+   "new_bbox": 958,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:85",
+   "what": "highway=footway ways: Berkeley",
+   "old": 5995,
+   "new_bbox": 5995,
+   "new_city_polygon": 5036,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:86",
+   "what": "highway=cycleway ways: SF",
+   "old": 626,
+   "new_bbox": 626,
+   "new_city_polygon": 594,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:86",
+   "what": "highway=cycleway ways: Oakland",
+   "old": 589,
+   "new_bbox": 589,
+   "new_city_polygon": 358,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:86",
+   "what": "highway=cycleway ways: Emeryville",
+   "old": 93,
+   "new_bbox": 93,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:86",
+   "what": "highway=cycleway ways: Berkeley",
+   "old": 298,
+   "new_bbox": 298,
+   "new_city_polygon": 206,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:87",
+   "what": "path + steps ways: SF",
+   "old": 3682,
+   "new_bbox": 3682,
+   "new_city_polygon": 3540,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:87",
+   "what": "path + steps ways: Oakland",
+   "old": 1372,
+   "new_bbox": 1372,
+   "new_city_polygon": 1154,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:87",
+   "what": "path + steps ways: Emeryville",
+   "old": 37,
+   "new_bbox": 37,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:87",
+   "what": "path + steps ways: Berkeley",
+   "old": 1553,
+   "new_bbox": 1553,
+   "new_city_polygon": 1011,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:88",
+   "what": "highway ways bridge=yes: SF",
+   "old": 738,
+   "new_bbox": 738,
+   "new_city_polygon": 695,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:88",
+   "what": "highway ways bridge=yes: Oakland",
+   "old": 797,
+   "new_bbox": 797,
+   "new_city_polygon": 695,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:88",
+   "what": "highway ways bridge=yes: Emeryville",
+   "old": 45,
+   "new_bbox": 45,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:88",
+   "what": "highway ways bridge=yes: Berkeley",
+   "old": 210,
+   "new_bbox": 210,
+   "new_city_polygon": 106,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:89",
+   "what": "highway ways bridge != no: SF",
+   "old": 772,
+   "new_bbox": 772,
+   "new_city_polygon": 727,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0,
+   "also_at_lines": [
+    206
+   ]
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:89",
+   "what": "highway ways bridge != no: Oakland",
+   "old": 813,
+   "new_bbox": 813,
+   "new_city_polygon": 703,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:89",
+   "what": "highway ways bridge != no: Emeryville",
+   "old": 46,
+   "new_bbox": 46,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:89",
+   "what": "highway ways bridge != no: Berkeley",
+   "old": 214,
+   "new_bbox": 214,
+   "new_city_polygon": 110,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:90",
+   "what": "highway ways tunnel=yes: SF",
+   "old": 229,
+   "new_bbox": 229,
+   "new_city_polygon": 216,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0,
+   "also_at_lines": [
+    100
+   ]
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:90",
+   "what": "highway ways tunnel=yes: Oakland",
+   "old": 50,
+   "new_bbox": 50,
+   "new_city_polygon": 49,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:90",
+   "what": "highway ways tunnel=yes: Emeryville",
+   "old": 7,
+   "new_bbox": 7,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:90",
+   "what": "highway ways tunnel=yes: Berkeley",
+   "old": 29,
+   "new_bbox": 29,
+   "new_city_polygon": 21,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:91",
+   "what": "highway ways tunnel != no: SF",
+   "old": 406,
+   "new_bbox": 406,
+   "new_city_polygon": 389,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0,
+   "also_at_lines": [
+    100,
+    206
+   ]
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:91",
+   "what": "highway ways tunnel != no: Oakland",
+   "old": 152,
+   "new_bbox": 152,
+   "new_city_polygon": 113,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:91",
+   "what": "highway ways tunnel != no: Emeryville",
+   "old": 23,
+   "new_bbox": 23,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:91",
+   "what": "highway ways tunnel != no: Berkeley",
+   "old": 75,
+   "new_bbox": 75,
+   "new_city_polygon": 58,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:92",
+   "what": "bridge ways with layer: SF",
+   "old": 707,
+   "new_bbox": 707,
+   "new_city_polygon": 667,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0,
+   "also_at_lines": [
+    206
+   ]
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:92",
+   "what": "bridge ways with layer: Oakland",
+   "old": 752,
+   "new_bbox": 752,
+   "new_city_polygon": 654,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:92",
+   "what": "bridge ways with layer: Emeryville",
+   "old": 40,
+   "new_bbox": 40,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:92",
+   "what": "bridge ways with layer: Berkeley",
+   "old": 171,
+   "new_bbox": 171,
+   "new_city_polygon": 85,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:93",
+   "what": "tunnel ways with layer: SF",
+   "old": 266,
+   "new_bbox": 266,
+   "new_city_polygon": 253,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0,
+   "also_at_lines": [
+    206
+   ]
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:93",
+   "what": "tunnel ways with layer: Oakland",
+   "old": 47,
+   "new_bbox": 47,
+   "new_city_polygon": 46,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:93",
+   "what": "tunnel ways with layer: Emeryville",
+   "old": 7,
+   "new_bbox": 7,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:93",
+   "what": "tunnel ways with layer: Berkeley",
+   "old": 41,
+   "new_bbox": 41,
+   "new_city_polygon": 33,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:94",
+   "what": "bridge ways with name: SF",
+   "old": 234,
+   "new_bbox": 234,
+   "new_city_polygon": 211,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:94",
+   "what": "bridge ways with name: Oakland",
+   "old": 393,
+   "new_bbox": 393,
+   "new_city_polygon": 340,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:94",
+   "what": "bridge ways with name: Emeryville",
+   "old": 25,
+   "new_bbox": 25,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:94",
+   "what": "bridge ways with name: Berkeley",
+   "old": 83,
+   "new_bbox": 83,
+   "new_city_polygon": 33,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:95",
+   "what": "bridge ways with bridge:structure: SF",
+   "old": 26,
+   "new_bbox": 13,
+   "new_city_polygon": 6,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "differs",
+   "delta_bbox": -13,
+   "note": "SF old 26 is not reproduced (13 in the same box); counted as highway ways with bridge != no."
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:95",
+   "what": "bridge ways with bridge:structure: Oakland",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0,
+   "note": "SF old 26 is not reproduced (13 in the same box); counted as highway ways with bridge != no."
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:95",
+   "what": "bridge ways with bridge:structure: Emeryville",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0,
+   "note": "SF old 26 is not reproduced (13 in the same box); counted as highway ways with bridge != no."
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:95",
+   "what": "bridge ways with bridge:structure: Berkeley",
+   "old": 1,
+   "new_bbox": 1,
+   "new_city_polygon": 1,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0,
+   "note": "SF old 26 is not reproduced (13 in the same box); counted as highway ways with bridge != no."
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:96",
+   "what": "non-highway bridge=* ways: SF",
+   "old": 89,
+   "new_bbox": 89,
+   "new_city_polygon": 71,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:96",
+   "what": "non-highway bridge=* ways: Oakland",
+   "old": 128,
+   "new_bbox": 128,
+   "new_city_polygon": 137,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:96",
+   "what": "non-highway bridge=* ways: Emeryville",
+   "old": 11,
+   "new_bbox": 11,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:96",
+   "what": "non-highway bridge=* ways: Berkeley",
+   "old": 32,
+   "new_bbox": 32,
+   "new_city_polygon": 12,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:111",
+   "what": "highway=traffic_signals nodes: SF",
+   "old": 2286,
+   "new_bbox": 2286,
+   "new_city_polygon": 2227,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0,
+   "also_at_lines": [
+    207
+   ]
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:111",
+   "what": "highway=traffic_signals nodes: Oakland",
+   "old": 1440,
+   "new_bbox": 1440,
+   "new_city_polygon": 1176,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:111",
+   "what": "highway=traffic_signals nodes: Emeryville",
+   "old": 91,
+   "new_bbox": 91,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:111",
+   "what": "highway=traffic_signals nodes: Berkeley",
+   "old": 320,
+   "new_bbox": 320,
+   "new_city_polygon": 242,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:112",
+   "what": "traffic_signals:direction nodes: SF",
+   "old": 460,
+   "new_bbox": 460,
+   "new_city_polygon": 453,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:112",
+   "what": "traffic_signals:direction nodes: Oakland",
+   "old": 348,
+   "new_bbox": 348,
+   "new_city_polygon": 223,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:112",
+   "what": "traffic_signals:direction nodes: Emeryville",
+   "old": 8,
+   "new_bbox": 8,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:112",
+   "what": "traffic_signals:direction nodes: Berkeley",
+   "old": 60,
+   "new_bbox": 60,
+   "new_city_polygon": 36,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:113",
+   "what": "highway=crossing nodes: SF",
+   "old": 19891,
+   "new_bbox": 19891,
+   "new_city_polygon": 19570,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0,
+   "also_at_lines": [
+    207
+   ]
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:113",
+   "what": "highway=crossing nodes: Oakland",
+   "old": 13754,
+   "new_bbox": 13754,
+   "new_city_polygon": 9439,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:113",
+   "what": "highway=crossing nodes: Emeryville",
+   "old": 676,
+   "new_bbox": 676,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:113",
+   "what": "highway=crossing nodes: Berkeley",
+   "old": 4642,
+   "new_bbox": 4642,
+   "new_city_polygon": 3645,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:114",
+   "what": "crossing nodes with a crossing=* subtype: SF",
+   "old": 18174,
+   "new_bbox": 18174,
+   "new_city_polygon": 17924,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:114",
+   "what": "crossing nodes with a crossing=* subtype: Oakland",
+   "old": 12434,
+   "new_bbox": 12434,
+   "new_city_polygon": 8311,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:114",
+   "what": "crossing nodes with a crossing=* subtype: Emeryville",
+   "old": 602,
+   "new_bbox": 602,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:114",
+   "what": "crossing nodes with a crossing=* subtype: Berkeley",
+   "old": 4485,
+   "new_bbox": 4485,
+   "new_city_polygon": 3545,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:115",
+   "what": "highway=stop nodes: SF",
+   "old": 4941,
+   "new_bbox": 4941,
+   "new_city_polygon": 4716,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0,
+   "also_at_lines": [
+    207
+   ]
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:115",
+   "what": "highway=stop nodes: Oakland",
+   "old": 5503,
+   "new_bbox": 5503,
+   "new_city_polygon": 4108,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:115",
+   "what": "highway=stop nodes: Emeryville",
+   "old": 283,
+   "new_bbox": 283,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:115",
+   "what": "highway=stop nodes: Berkeley",
+   "old": 2296,
+   "new_bbox": 2296,
+   "new_city_polygon": 1613,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:116",
+   "what": "highway=give_way nodes: SF",
+   "old": 47,
+   "new_bbox": 47,
+   "new_city_polygon": 47,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:116",
+   "what": "highway=give_way nodes: Oakland",
+   "old": 421,
+   "new_bbox": 421,
+   "new_city_polygon": 404,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:116",
+   "what": "highway=give_way nodes: Emeryville",
+   "old": 46,
+   "new_bbox": 46,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:116",
+   "what": "highway=give_way nodes: Berkeley",
+   "old": 271,
+   "new_bbox": 271,
+   "new_city_polygon": 183,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:117",
+   "what": "highway=street_lamp nodes: SF",
+   "old": 1801,
+   "new_bbox": 1801,
+   "new_city_polygon": 1786,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0,
+   "also_at_lines": [
+    132,
+    178,
+    198,
+    207
+   ]
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:117",
+   "what": "highway=street_lamp nodes: Oakland",
+   "old": 886,
+   "new_bbox": 886,
+   "new_city_polygon": 568,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:117",
+   "what": "highway=street_lamp nodes: Emeryville",
+   "old": 61,
+   "new_bbox": 61,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:117",
+   "what": "highway=street_lamp nodes: Berkeley",
+   "old": 91,
+   "new_bbox": 91,
+   "new_city_polygon": 74,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:118",
+   "what": "barrier=kerb nodes: SF",
+   "old": 8871,
+   "new_bbox": 8860,
+   "new_city_polygon": 8820,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -11,
+   "also_at_lines": [
+    207
+   ]
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:118",
+   "what": "barrier=kerb nodes: Oakland",
+   "old": 3243,
+   "new_bbox": 3243,
+   "new_city_polygon": 2671,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:118",
+   "what": "barrier=kerb nodes: Emeryville",
+   "old": 331,
+   "new_bbox": 331,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:118",
+   "what": "barrier=kerb nodes: Berkeley",
+   "old": 2131,
+   "new_bbox": 2131,
+   "new_city_polygon": 1953,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:119",
+   "what": "kerb=* nodes (any value): SF",
+   "old": 11584,
+   "new_bbox": 11572,
+   "new_city_polygon": 11528,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -12
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:119",
+   "what": "kerb=* nodes (any value): Oakland",
+   "old": 7051,
+   "new_bbox": 7038,
+   "new_city_polygon": 4697,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -13
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:119",
+   "what": "kerb=* nodes (any value): Emeryville",
+   "old": 393,
+   "new_bbox": 380,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "differs",
+   "delta_bbox": -13
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:119",
+   "what": "kerb=* nodes (any value): Berkeley",
+   "old": 2879,
+   "new_bbox": 2879,
+   "new_city_polygon": 2618,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:120",
+   "what": "barrier=kerb ways: SF",
+   "old": 121,
+   "new_bbox": 121,
+   "new_city_polygon": 121,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:120",
+   "what": "barrier=kerb ways: Oakland",
+   "old": 23,
+   "new_bbox": 23,
+   "new_city_polygon": 37,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:120",
+   "what": "barrier=kerb ways: Emeryville",
+   "old": 55,
+   "new_bbox": 55,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:120",
+   "what": "barrier=kerb ways: Berkeley",
+   "old": 75,
+   "new_bbox": 75,
+   "new_city_polygon": 53,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:121",
+   "what": "natural=tree nodes: SF",
+   "old": 10866,
+   "new_bbox": 10866,
+   "new_city_polygon": 10839,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0,
+   "also_at_lines": [
+    133,
+    207
+   ]
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:121",
+   "what": "natural=tree nodes: Oakland",
+   "old": 1946,
+   "new_bbox": 1946,
+   "new_city_polygon": 1414,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:121",
+   "what": "natural=tree nodes: Emeryville",
+   "old": 185,
+   "new_bbox": 185,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:121",
+   "what": "natural=tree nodes: Berkeley",
+   "old": 873,
+   "new_bbox": 873,
+   "new_city_polygon": 643,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:122",
+   "what": "trees with height: SF",
+   "old": 230,
+   "new_bbox": 230,
+   "new_city_polygon": 230,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:122",
+   "what": "trees with height: Oakland",
+   "old": 10,
+   "new_bbox": 10,
+   "new_city_polygon": 10,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:122",
+   "what": "trees with height: Emeryville",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:122",
+   "what": "trees with height: Berkeley",
+   "old": 2,
+   "new_bbox": 2,
+   "new_city_polygon": 0,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:123",
+   "what": "trees with species: SF",
+   "old": 446,
+   "new_bbox": 446,
+   "new_city_polygon": 446,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:123",
+   "what": "trees with species: Oakland",
+   "old": 45,
+   "new_bbox": 45,
+   "new_city_polygon": 45,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:123",
+   "what": "trees with species: Emeryville",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:123",
+   "what": "trees with species: Berkeley",
+   "old": 124,
+   "new_bbox": 124,
+   "new_city_polygon": 124,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:124",
+   "what": "trees with genus: SF",
+   "old": 326,
+   "new_bbox": 326,
+   "new_city_polygon": 326,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:124",
+   "what": "trees with genus: Oakland",
+   "old": 43,
+   "new_bbox": 43,
+   "new_city_polygon": 43,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:124",
+   "what": "trees with genus: Emeryville",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:124",
+   "what": "trees with genus: Berkeley",
+   "old": 3,
+   "new_bbox": 3,
+   "new_city_polygon": 3,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:125",
+   "what": "trees with circumference: SF",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:125",
+   "what": "trees with circumference: Oakland",
+   "old": 7,
+   "new_bbox": 7,
+   "new_city_polygon": 7,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:125",
+   "what": "trees with circumference: Emeryville",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:125",
+   "what": "trees with circumference: Berkeley",
+   "old": 1,
+   "new_bbox": 1,
+   "new_city_polygon": 0,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:126",
+   "what": "natural=tree_row ways: SF",
+   "old": 20,
+   "new_bbox": 20,
+   "new_city_polygon": 19,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:126",
+   "what": "natural=tree_row ways: Oakland",
+   "old": 25,
+   "new_bbox": 25,
+   "new_city_polygon": 3,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:126",
+   "what": "natural=tree_row ways: Emeryville",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:126",
+   "what": "natural=tree_row ways: Berkeley",
+   "old": 9,
+   "new_bbox": 9,
+   "new_city_polygon": 8,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:127",
+   "what": "highway=bus_stop nodes: SF",
+   "old": 3378,
+   "new_bbox": 3378,
+   "new_city_polygon": 3269,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:127",
+   "what": "highway=bus_stop nodes: Oakland",
+   "old": 2009,
+   "new_bbox": 2009,
+   "new_city_polygon": 1685,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:127",
+   "what": "highway=bus_stop nodes: Emeryville",
+   "old": 102,
+   "new_bbox": 102,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:127",
+   "what": "highway=bus_stop nodes: Berkeley",
+   "old": 756,
+   "new_bbox": 756,
+   "new_city_polygon": 585,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:128",
+   "what": "traffic_calming nodes: SF",
+   "old": 889,
+   "new_bbox": 889,
+   "new_city_polygon": 885,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:128",
+   "what": "traffic_calming nodes: Oakland",
+   "old": 2666,
+   "new_bbox": 2666,
+   "new_city_polygon": 2273,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:128",
+   "what": "traffic_calming nodes: Emeryville",
+   "old": 139,
+   "new_bbox": 139,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:128",
+   "what": "traffic_calming nodes: Berkeley",
+   "old": 566,
+   "new_bbox": 566,
+   "new_city_polygon": 364,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:142",
+   "what": "railway=tram ways: SF",
+   "old": 127,
+   "new_bbox": 127,
+   "new_city_polygon": 127,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:142",
+   "what": "railway=tram ways: Oakland",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:142",
+   "what": "railway=tram ways: Emeryville",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:142",
+   "what": "railway=tram ways: Berkeley",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:143",
+   "what": "railway=cable_car ways: SF",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:143",
+   "what": "railway=cable_car ways: Oakland",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:143",
+   "what": "railway=cable_car ways: Emeryville",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:143",
+   "what": "railway=cable_car ways: Berkeley",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:144",
+   "what": "aerialway=cable_car ways: SF",
+   "old": 1,
+   "new_bbox": 1,
+   "new_city_polygon": 1,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:144",
+   "what": "aerialway=cable_car ways: Oakland",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:144",
+   "what": "aerialway=cable_car ways: Emeryville",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:144",
+   "what": "aerialway=cable_car ways: Berkeley",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:145",
+   "what": "railway=light_rail ways: SF",
+   "old": 456,
+   "new_bbox": 456,
+   "new_city_polygon": 454,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0,
+   "also_at_lines": [
+    159
+   ]
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:145",
+   "what": "railway=light_rail ways: Oakland",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:145",
+   "what": "railway=light_rail ways: Emeryville",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:145",
+   "what": "railway=light_rail ways: Berkeley",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:146",
+   "what": "railway=subway ways: SF",
+   "old": 62,
+   "new_bbox": 62,
+   "new_city_polygon": 40,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:146",
+   "what": "railway=subway ways: Oakland",
+   "old": 182,
+   "new_bbox": 182,
+   "new_city_polygon": 226,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:146",
+   "what": "railway=subway ways: Emeryville",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:146",
+   "what": "railway=subway ways: Berkeley",
+   "old": 37,
+   "new_bbox": 37,
+   "new_city_polygon": 16,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:147",
+   "what": "railway=rail ways: SF",
+   "old": 175,
+   "new_bbox": 175,
+   "new_city_polygon": 161,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:147",
+   "what": "railway=rail ways: Oakland",
+   "old": 409,
+   "new_bbox": 409,
+   "new_city_polygon": 350,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:147",
+   "what": "railway=rail ways: Emeryville",
+   "old": 62,
+   "new_bbox": 62,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:147",
+   "what": "railway=rail ways: Berkeley",
+   "old": 47,
+   "new_bbox": 47,
+   "new_city_polygon": 27,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:148",
+   "what": "railway=funicular ways: SF",
+   "old": 3,
+   "new_bbox": 3,
+   "new_city_polygon": 3,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:148",
+   "what": "railway=funicular ways: Oakland",
+   "old": 17,
+   "new_bbox": 17,
+   "new_city_polygon": 17,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:148",
+   "what": "railway=funicular ways: Emeryville",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:148",
+   "what": "railway=funicular ways: Berkeley",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:149",
+   "what": "trolley_wire=yes ways: SF",
+   "old": 1806,
+   "new_bbox": 1806,
+   "new_city_polygon": 1779,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0,
+   "also_at_lines": [
+    157,
+    185,
+    208
+   ]
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:149",
+   "what": "trolley_wire=yes ways: Oakland",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:149",
+   "what": "trolley_wire=yes ways: Emeryville",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:149",
+   "what": "trolley_wire=yes ways: Berkeley",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:150",
+   "what": "trolley_wire=* ways (any value): SF",
+   "old": 1861,
+   "new_bbox": 1861,
+   "new_city_polygon": 1834,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0,
+   "also_at_lines": [
+    208
+   ]
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:150",
+   "what": "trolley_wire=* ways (any value): Oakland",
+   "old": 1,
+   "new_bbox": 1,
+   "new_city_polygon": 1,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:150",
+   "what": "trolley_wire=* ways (any value): Emeryville",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:150",
+   "what": "trolley_wire=* ways (any value): Berkeley",
+   "old": 1,
+   "new_bbox": 1,
+   "new_city_polygon": 1,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:151",
+   "what": "trolley_wire on nodes: SF",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:151",
+   "what": "trolley_wire on nodes: Oakland",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:151",
+   "what": "trolley_wire on nodes: Emeryville",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:151",
+   "what": "trolley_wire on nodes: Berkeley",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:152",
+   "what": "electrified=contact_line ways: SF",
+   "old": 611,
+   "new_bbox": 611,
+   "new_city_polygon": 598,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:152",
+   "what": "electrified=contact_line ways: Oakland",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:152",
+   "what": "electrified=contact_line ways: Emeryville",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:152",
+   "what": "electrified=contact_line ways: Berkeley",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:153",
+   "what": "railway=tram ways with electrified: SF",
+   "old": 126,
+   "new_bbox": 126,
+   "new_city_polygon": 126,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0,
+   "note": "old text: '126 of 127'"
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:153",
+   "what": "railway=tram ways with electrified: Oakland",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "exact",
+   "delta_bbox": 0,
+   "note": "old text: '126 of 127'"
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:153",
+   "what": "railway=tram ways with electrified: Emeryville",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0,
+   "note": "old text: '126 of 127'"
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:153",
+   "what": "railway=tram ways with electrified: Berkeley",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "exact",
+   "delta_bbox": 0,
+   "note": "old text: '126 of 127'"
+  },
+  {
+   "file_line": "tools/research/night-lighting-data.md:14",
+   "what": "OSM street_lamp nodes, SF",
+   "old": [
+    1445,
+    1451
+   ],
+   "new_bbox": 1801,
+   "new_city_polygon": 1786,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "outside_old_range",
+   "note": "osm-completeness.md:117 already says 1,801 for this box; night-lighting-data.md used a partial query."
+  },
+  {
+   "file_line": "tools/research/night-lighting-data.md:14",
+   "what": "OSM street_lamp nodes, Oakland bbox",
+   "old": 956,
+   "new_bbox": 886,
+   "new_city_polygon": 568,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "differs",
+   "delta_bbox": -70
+  },
+  {
+   "file_line": "tools/research/night-lighting-data.md:14",
+   "what": "OSM street_lamp nodes, Berkeley",
+   "old": 105,
+   "new_bbox": 91,
+   "new_city_polygon": 74,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "differs",
+   "delta_bbox": -14
+  },
+  {
+   "file_line": "tools/research/street-furniture.md:21",
+   "what": "OSM emergency=fire_hydrant nodes, SF bbox",
+   "old": 1241,
+   "new_bbox": 1241,
+   "new_city_polygon": 1237,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/street-furniture.md:80",
+   "what": "OSM emergency=fire_hydrant nodes, SF bbox",
+   "old": 1241,
+   "new_bbox": 1241,
+   "new_city_polygon": 1237,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/street-furniture.md:176",
+   "what": "OSM emergency=fire_hydrant nodes, SF bbox",
+   "old": 1241,
+   "new_bbox": 1241,
+   "new_city_polygon": 1237,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/street-furniture.md:13",
+   "what": "OSM highway=street_lamp nodes, SF bbox (was UNCONFIRMED)",
+   "old": null,
+   "new_bbox": 1801,
+   "new_city_polygon": 1786,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "old_value_unconfirmed_or_absent",
+   "also_at_lines": [
+    159
+   ]
+  },
+  {
+   "file_line": "tools/research/street-furniture.md:18",
+   "what": "OSM power=pole nodes, SF bbox (was UNCONFIRMED)",
+   "old": null,
+   "new_bbox": 2769,
+   "new_city_polygon": 2589,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "old_value_unconfirmed_or_absent",
+   "also_at_lines": [
+    159
+   ]
+  },
+  {
+   "file_line": "tools/research/street-furniture.md:18",
+   "what": "OSM power=minor_line ways, SF bbox (was UNCONFIRMED)",
+   "old": null,
+   "new_bbox": 228,
+   "new_city_polygon": 214,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "old_value_unconfirmed_or_absent"
+  },
+  {
+   "file_line": "tools/research/street-furniture.md:19",
+   "what": "OSM trolley_wire=yes ways, SF bbox (was UNCONFIRMED)",
+   "old": null,
+   "new_bbox": 1806,
+   "new_city_polygon": 1779,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "old_value_unconfirmed_or_absent",
+   "also_at_lines": [
+    159
+   ]
+  },
+  {
+   "file_line": "tools/research/street-furniture.md:22",
+   "what": "OSM amenity=waste_basket nodes, SF bbox (was UNCONFIRMED)",
+   "old": null,
+   "new_bbox": 1285,
+   "new_city_polygon": 1278,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "old_value_unconfirmed_or_absent",
+   "also_at_lines": [
+    159
+   ]
+  },
+  {
+   "file_line": "tools/research/street-furniture.md:23",
+   "what": "OSM amenity=bench nodes, SF bbox (was UNCONFIRMED)",
+   "old": null,
+   "new_bbox": 3285,
+   "new_city_polygon": 3231,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "old_value_unconfirmed_or_absent",
+   "also_at_lines": [
+    159
+   ]
+  },
+  {
+   "file_line": "tools/research/street-furniture.md:20",
+   "what": "OSM shelter=yes nodes, SF bbox (bus shelters; was UNCONFIRMED)",
+   "old": null,
+   "new_bbox": 871,
+   "new_city_polygon": 867,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "old_value_unconfirmed_or_absent",
+   "also_at_lines": [
+    87,
+    159
+   ]
+  },
+  {
+   "file_line": "tools/research/street-furniture.md:31",
+   "what": "OSM amenity=post_box nodes, SF bbox (was UNCONFIRMED)",
+   "old": null,
+   "new_bbox": 615,
+   "new_city_polygon": 612,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "old_value_unconfirmed_or_absent",
+   "also_at_lines": [
+    159
+   ]
+  },
+  {
+   "file_line": "tools/research/street-furniture.md:92",
+   "what": "OSM railway=subway_entrance nodes, SF bbox (was UNCONFIRMED)",
+   "old": null,
+   "new_bbox": 71,
+   "new_city_polygon": 69,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "old_value_unconfirmed_or_absent",
+   "also_at_lines": [
+    159
+   ]
+  },
+  {
+   "file_line": "tools/research/structures.md:14",
+   "what": "OSM highway bridge ways (bridge != no), SF bbox",
+   "old": 772,
+   "new_bbox": 772,
+   "new_city_polygon": 727,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0,
+   "also_at_lines": [
+    24,
+    148
+   ]
+  },
+  {
+   "file_line": "tools/research/structures.md:14",
+   "what": "OSM highway bridge ways (bridge != no), Phase-2 bbox",
+   "old": 901,
+   "new_bbox": 901,
+   "new_city_polygon": null,
+   "bbox_scope": "phase2_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0,
+   "also_at_lines": [
+    25,
+    148
+   ]
+  },
+  {
+   "file_line": "tools/research/structures.md:15",
+   "what": "OSM highway tunnel ways (tunnel != no), SF bbox",
+   "old": 406,
+   "new_bbox": 406,
+   "new_city_polygon": 389,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0,
+   "also_at_lines": [
+    148
+   ]
+  },
+  {
+   "file_line": "tools/research/structures.md:15",
+   "what": "... of which steps",
+   "old": 125,
+   "new_bbox": 125,
+   "new_city_polygon": 125,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/structures.md:15",
+   "what": "... of which tunnel=building_passage (highway ways)",
+   "old": 165,
+   "new_bbox": 177,
+   "new_city_polygon": 173,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "differs",
+   "delta_bbox": 12,
+   "note": "old value was approximate ('~165')."
+  },
+  {
+   "file_line": "tools/research/structures.md:15",
+   "what": "... vehicle tunnels: drivable non-service highway ways with tunnel=yes",
+   "old": 25,
+   "new_bbox": 26,
+   "new_city_polygon": 22,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": 1,
+   "note": "old value approximate ('~25'); counted motorway..unclassified + links with tunnel=yes."
+  },
+  {
+   "file_line": "tools/research/structures.md:16",
+   "what": "Phase-2 bbox highway tunnel ways (tunnel != no; was UNCONFIRMED)",
+   "old": null,
+   "new_bbox": 196,
+   "new_city_polygon": null,
+   "bbox_scope": "phase2_bbox",
+   "city_scope": null,
+   "status": "old_value_unconfirmed_or_absent",
+   "also_at_lines": [
+    139
+   ]
+  },
+  {
+   "file_line": "tools/research/structures.md:16",
+   "what": "Phase-2 bbox railway tunnel ways (any railway=*; was UNCONFIRMED)",
+   "old": null,
+   "new_bbox": 67,
+   "new_city_polygon": null,
+   "bbox_scope": "phase2_bbox",
+   "city_scope": null,
+   "status": "old_value_unconfirmed_or_absent"
+  },
+  {
+   "file_line": "tools/research/structures.md:16",
+   "what": "SF bbox railway tunnel ways (any railway=*; was UNCONFIRMED)",
+   "old": null,
+   "new_bbox": 165,
+   "new_city_polygon": 165,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "old_value_unconfirmed_or_absent"
+  },
+  {
+   "file_line": "tools/research/water-shoreline.md:51",
+   "what": "route=ferry ways in 37.60..38.00, -122.60..-122.10",
+   "old": 24,
+   "new_bbox": 24,
+   "new_city_polygon": null,
+   "bbox_scope": "ferry_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/water-shoreline.md:51",
+   "what": "route=ferry relations in the same box",
+   "old": 30,
+   "new_bbox": 30,
+   "new_city_polygon": null,
+   "bbox_scope": "ferry_bbox",
+   "city_scope": null,
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/research/road-markings.md:178",
+   "what": "railway=light_rail ways, SF (old = partial 'northern SF extract')",
+   "old": 117,
+   "new_bbox": 456,
+   "new_city_polygon": 454,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "not_comparable",
+   "note": "old count came from a partial cache; not comparable."
+  },
+  {
+   "file_line": "tools/research/road-markings.md:179",
+   "what": "railway=tram ways, SF (old = partial extract)",
+   "old": 36,
+   "new_bbox": 127,
+   "new_city_polygon": 127,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "not_comparable",
+   "note": "old count came from a partial cache; not comparable."
+  },
+  {
+   "file_line": "tools/research/road-markings.md:180",
+   "what": "railway=tram gauge=1067 ways (cable car track), SF",
+   "old": 77,
+   "new_bbox": 78,
+   "new_city_polygon": 78,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": 1,
+   "note": "77 of these have electrified=no and 1 has no electrified tag; the old 77 is the electrified=no subset."
+  },
+  {
+   "file_line": "tools/research/road-markings.md:194",
+   "what": "OSM ways in the SF cache (osm_roads.json, 11,004)",
+   "old": 11004,
+   "new_bbox": 15007,
+   "new_city_polygon": 14190,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "not_comparable",
+   "note": "cache extent unknown (northern SF); value shown is all drivable non-service ways for scale."
+  },
+  {
+   "file_line": "tools/research/osm-completeness.md:156",
+   "what": "railway=cable_car ways (cable cars are railway=tram gauge=1067, see report)",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0,
+   "also_at_lines": [
+    186,
+    194,
+    208
+   ]
+  },
+  {
+   "file_line": "tools/MAP_RESOURCES.md:201",
+   "what": "railway=cable_car ways (same statement in MAP_RESOURCES)",
+   "old": 0,
+   "new_bbox": 0,
+   "new_city_polygon": 0,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "exact",
+   "delta_bbox": 0
+  },
+  {
+   "file_line": "tools/MAP_RESOURCES.md:246",
+   "what": "OSM street lamps SF as % of ~44k real (old ~3%)",
+   "old": [
+    2.5,
+    3.5
+   ],
+   "new_bbox": 4.09,
+   "new_city_polygon": 4.06,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "outside_old_range",
+   "note": "43-45k is the notes' own figure, not from OSM: at 43k 4.2%, at 45k 4.0%."
+  },
+  {
+   "file_line": "tools/MAP_RESOURCES.md:407",
+   "what": "tunnel=building_passage highway ways (~165)",
+   "old": 165,
+   "new_bbox": 177,
+   "new_city_polygon": 173,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "differs",
+   "delta_bbox": 12,
+   "note": "all ways with tunnel=building_passage: 208 in sf_bbox"
+  },
+  {
+   "file_line": "tools/research/building-heights-method.md:12",
+   "what": "OSM-tagged building heights, SF (~143k)",
+   "old": 143000,
+   "new_bbox": 142417,
+   "new_city_polygon": 139822,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -583,
+   "also_at_lines": [
+    51,
+    449
+   ],
+   "note": "old value approximate ('~143k')."
+  },
+  {
+   "file_line": "tools/research/building-heights-method.md:12",
+   "what": "OSM buildings, SF (~171k)",
+   "old": 171000,
+   "new_bbox": 170024,
+   "new_city_polygon": 161529,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "differs",
+   "delta_bbox": -976,
+   "also_at_lines": [
+    374
+   ],
+   "note": "old value approximate ('~171k')."
+  },
+  {
+   "file_line": "tools/research/building-heights-method.md:179",
+   "what": "OSM building:part, SF (note's 1,647 is Overture building_part)",
+   "old": 1647,
+   "new_bbox": 1686,
+   "new_city_polygon": 1665,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "not_comparable",
+   "note": "old number is Overture's, not OSM's; shown for scale."
+  },
+  {
+   "file_line": "tools/MAP_RESOURCES.md:111",
+   "what": "OSM building height share, SF (84%)",
+   "old": 84,
+   "new_bbox": 83.76,
+   "new_city_polygon": 86.56,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "close_(<=0.5pct_or_3)",
+   "delta_bbox": -0.24
+  },
+  {
+   "file_line": "tools/MAP_RESOURCES.md:111",
+   "what": "OSM building height share %, Oakland (East Bay 0.1-0.3%)",
+   "old": [
+    0.1,
+    0.3
+   ],
+   "new_bbox": 0.09,
+   "new_city_polygon": 0.1,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "outside_old_range"
+  },
+  {
+   "file_line": "tools/MAP_RESOURCES.md:111",
+   "what": "OSM building:levels share %, Oakland (1-4%)",
+   "old": [
+    1.0,
+    4.0
+   ],
+   "new_bbox": 0.83,
+   "new_city_polygon": 0.99,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "outside_old_range"
+  },
+  {
+   "file_line": "tools/MAP_RESOURCES.md:111",
+   "what": "OSM roof:shape share %, Oakland (0.1-0.4%)",
+   "old": [
+    0.1,
+    0.4
+   ],
+   "new_bbox": 0.06,
+   "new_city_polygon": 0.08,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "outside_old_range"
+  },
+  {
+   "file_line": "tools/MAP_RESOURCES.md:111",
+   "what": "OSM building height share %, Berkeley (East Bay 0.1-0.3%)",
+   "old": [
+    0.1,
+    0.3
+   ],
+   "new_bbox": 0.06,
+   "new_city_polygon": 0.04,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "outside_old_range"
+  },
+  {
+   "file_line": "tools/MAP_RESOURCES.md:111",
+   "what": "OSM building:levels share %, Berkeley (1-4%)",
+   "old": [
+    1.0,
+    4.0
+   ],
+   "new_bbox": 3.68,
+   "new_city_polygon": 4.92,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "within_old_range"
+  },
+  {
+   "file_line": "tools/MAP_RESOURCES.md:111",
+   "what": "OSM roof:shape share %, Berkeley (0.1-0.4%)",
+   "old": [
+    0.1,
+    0.4
+   ],
+   "new_bbox": 0.45,
+   "new_city_polygon": 0.62,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "outside_old_range"
+  },
+  {
+   "file_line": "tools/MAP_RESOURCES.md:111",
+   "what": "OSM building height share %, Emeryville (East Bay 0.1-0.3%)",
+   "old": [
+    0.1,
+    0.3
+   ],
+   "new_bbox": 0.29,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "within_old_range"
+  },
+  {
+   "file_line": "tools/MAP_RESOURCES.md:111",
+   "what": "OSM building:levels share %, Emeryville (1-4%)",
+   "old": [
+    1.0,
+    4.0
+   ],
+   "new_bbox": 3.03,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "within_old_range"
+  },
+  {
+   "file_line": "tools/MAP_RESOURCES.md:111",
+   "what": "OSM roof:shape share %, Emeryville (0.1-0.4%)",
+   "old": [
+    0.1,
+    0.4
+   ],
+   "new_bbox": 0.15,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "within_old_range"
+  },
+  {
+   "file_line": "tools/MAP_RESOURCES.md:123",
+   "what": "OSM road name coverage %, SF (90-94%)",
+   "old": [
+    90.0,
+    94.0
+   ],
+   "new_bbox": 93.13,
+   "new_city_polygon": 93.31,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "within_old_range"
+  },
+  {
+   "file_line": "tools/MAP_RESOURCES.md:123",
+   "what": "OSM road width coverage %, SF (<0.5%)",
+   "old": [
+    0.0,
+    0.5
+   ],
+   "new_bbox": 0.29,
+   "new_city_polygon": 0.3,
+   "bbox_scope": "sf_bbox",
+   "city_scope": "sf",
+   "status": "within_old_range"
+  },
+  {
+   "file_line": "tools/MAP_RESOURCES.md:123",
+   "what": "OSM road name coverage %, Oakland (90-94%)",
+   "old": [
+    90.0,
+    94.0
+   ],
+   "new_bbox": 91.63,
+   "new_city_polygon": 90.57,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "within_old_range"
+  },
+  {
+   "file_line": "tools/MAP_RESOURCES.md:123",
+   "what": "OSM road width coverage %, Oakland (<0.5%)",
+   "old": [
+    0.0,
+    0.5
+   ],
+   "new_bbox": 0.03,
+   "new_city_polygon": 0.03,
+   "bbox_scope": "oakland_bbox",
+   "city_scope": "oakland",
+   "status": "within_old_range"
+  },
+  {
+   "file_line": "tools/MAP_RESOURCES.md:123",
+   "what": "OSM road name coverage %, Berkeley (90-94%)",
+   "old": [
+    90.0,
+    94.0
+   ],
+   "new_bbox": 93.54,
+   "new_city_polygon": 95.07,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "within_old_range"
+  },
+  {
+   "file_line": "tools/MAP_RESOURCES.md:123",
+   "what": "OSM road width coverage %, Berkeley (<0.5%)",
+   "old": [
+    0.0,
+    0.5
+   ],
+   "new_bbox": 0.33,
+   "new_city_polygon": 0.5,
+   "bbox_scope": "berkeley_bbox",
+   "city_scope": "berkeley",
+   "status": "within_old_range"
+  },
+  {
+   "file_line": "tools/MAP_RESOURCES.md:123",
+   "what": "OSM road name coverage %, Emeryville (90-94%)",
+   "old": [
+    90.0,
+    94.0
+   ],
+   "new_bbox": 90.29,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "within_old_range"
+  },
+  {
+   "file_line": "tools/MAP_RESOURCES.md:123",
+   "what": "OSM road width coverage %, Emeryville (<0.5%)",
+   "old": [
+    0.0,
+    0.5
+   ],
+   "new_bbox": 0.0,
+   "new_city_polygon": null,
+   "bbox_scope": "emeryville_bbox",
+   "city_scope": null,
+   "status": "within_old_range"
+  }
+ ]
+}

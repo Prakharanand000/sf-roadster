@@ -5,7 +5,7 @@ import * as THREE from 'three';
 
 const CHUNK_CELLS = 125;   // 1000 m
 // landcover palette (day): water, urban, park, wood, sand, lake, pier, pitch, scrub, rock, paved
-const LC_COL = [[50, 64, 64], [104, 102, 97], [84, 116, 54], [52, 78, 40], [206, 190, 150], [56, 72, 64], [104, 96, 86],
+export const LC_COL = [[50, 64, 64], [104, 102, 97], [84, 116, 54], [52, 78, 40], [206, 190, 150], [56, 72, 64], [104, 96, 86],
   [78, 124, 52], [108, 112, 70], [112, 104, 92], [122, 120, 116]];
 
 export function paintGroundCanvas(D, Q, width) {
@@ -32,7 +32,7 @@ export function paintGroundCanvas(D, Q, width) {
   const sx = W / (lc.nx * lc.res), sz = Hh / (lc.nz * lc.res);
   const px = (x) => (x - lc.x0) * sx, pz = (z) => (z - lc.z0) * sz;
   // 2) building AO halo (JS-rasterised footprints, blurred, drawn scaled)
-  {
+  if (D.B.count) {
     const mask = buildingMask(D);
     const blurred = boxBlur(mask, lc.nx, lc.nz, 1);
     const mc = document.createElement('canvas');
@@ -113,10 +113,23 @@ export function boxBlur(src, nx, nz, r) {
   return out;
 }
 
-function terrainMaterial(groundTex, uniforms) {
+/** `walls`: near-vertical non-vegetated ground (the pilot's lidar retaining walls) is drawn as
+ *  poured concrete with form lines instead of stretched ground texture.
+ *  `tileMask` { tex, rect: Vector4(x0, z0, width, depth) }: fragments whose tile texel is set are
+ *  discarded (the v2 world's coarse terrain, under the tiles that draw their own ground). */
+export function terrainMaterial(groundTex, uniforms, { walls = false, tileMask = null } = {}) {
   const mat = new THREE.MeshStandardMaterial({ map: groundTex, roughness: 0.96, metalness: 0 });
   mat.onBeforeCompile = (sh) => {
     sh.uniforms.uNight = uniforms.uNight;
+    if (tileMask) {
+      sh.uniforms.uTileMask = { value: tileMask.tex };
+      sh.uniforms.uTileRect = { value: tileMask.rect };
+      sh.fragmentShader = sh.fragmentShader
+        .replace('#include <common>', '#include <common>\nuniform sampler2D uTileMask;\nuniform vec4 uTileRect;')
+        .replace('#include <clipping_planes_fragment>', `#include <clipping_planes_fragment>
+{ vec2 tuv = (vWp.xz - uTileRect.xy) / uTileRect.zw;
+  if (tuv.x >= 0.0 && tuv.y >= 0.0 && tuv.x < 1.0 && tuv.y < 1.0 && texture2D(uTileMask, tuv).r > 0.5) discard; }`);
+    }
     sh.vertexShader = sh.vertexShader
       .replace('#include <common>', '#include <common>\nvarying vec3 vWp;\nvarying float vSlope;')
       .replace('#include <begin_vertex>', '#include <begin_vertex>\nvWp = (modelMatrix * vec4(position, 1.0)).xyz;\nvSlope = 1.0 - normal.y;');
@@ -137,14 +150,46 @@ float tn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f);
   diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.33, 0.29, 0.20) * (0.8 + 0.4 * n), st * 0.75);
   // wet shore band
   float wet = 1.0 - smoothstep(0.2, 1.4, vWp.y);
-  diffuseColor.rgb *= 1.0 - wet * 0.35;
+  diffuseColor.rgb *= 1.0 - wet * 0.35;${walls ? `
+  // face slope, not the 4 m-averaged vertex normal: a 3 m wall across one 2 m cell reads as a wall
+  vec3 fn = normalize(cross(dFdx(vWp), dFdy(vWp)));
+  float wall = smoothstep(0.28, 0.42, 1.0 - abs(fn.y)) * (1.0 - greenness);
+  float form = 0.88 + 0.12 * step(0.5, fract(vWp.y / 0.6));
+  diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.47, 0.45, 0.41) * (0.85 + 0.25 * n) * form, wall);` : ''}
 }`);
   };
-  mat.customProgramCacheKey = () => 'sf-terrain-v1';
+  mat.customProgramCacheKey = () => (walls ? 'sf-terrain-walls-v1' : 'sf-terrain-v1') + (tileMask ? '-mask' : '');
+  if (walls) {
+    // the pilot's ground grid sits exactly under its ribbons (1 cm below): push it back in depth
+    // so it never shows through a road, sidewalk or curb drawn over it
+    mat.polygonOffset = true;
+    mat.polygonOffsetFactor = 2;
+    mat.polygonOffsetUnits = 6;
+  }
   return mat;
 }
 
-export function buildTerrain(D, Q, { quality = 'high', uniforms } = {}) {
+/** How far to sink a vertex at (x,z) of height h under the pilot patch: 0.3 m below the lowest
+ *  pilot ground within 8 m (one LOD0 cell each way), tapered to 0 over the outer half of the
+ *  pilot's feather band so coarse LODs, whose cells straddle the box edge, barely dent outside it. */
+export function pilotSink(P) {
+  const b = P.bbox, g = P.grid, G = P.G, nx = g.nx, nz = g.nz, r = Math.ceil(8 / g.cell);
+  return (x, z, h) => {
+    if (!(x > b.x0 && x < b.x1 && z > b.z0 && z < b.z1)) return 0;
+    const ci = Math.round((x - g.x0) / g.cell), cj = Math.round((z - g.z0) / g.cell);
+    let lo = Infinity;
+    for (let j = Math.max(0, cj - r); j <= Math.min(nz - 1, cj + r); j++) {
+      for (let i = Math.max(0, ci - r); i <= Math.min(nx - 1, ci + r); i++) if (G[j * nx + i] < lo) lo = G[j * nx + i];
+    }
+    const e = Math.min(x - b.x0, b.x1 - x, z - b.z0, b.z1 - z);
+    return (Math.max(0, h - lo) + 0.3) * Math.min(1, (2 * e) / P.feather);
+  };
+}
+
+/** `chunkCells`: chunk size in grid cells; `tileMask`: see terrainMaterial (v2 coarse terrain);
+ *  `lodPad`: metres added to every LOD switch distance (they are measured from the chunk centre, so
+ *  chunks larger than 1 km pass half their extra size to keep the same detail at their near edge). */
+export function buildTerrain(D, Q, { quality = 'high', uniforms, chunkCells = CHUNK_CELLS, tileMask = null, lodPad = 0 } = {}) {
   const g = D.grid;
   const NX = g.nx, NZ = g.nz, CELL = g.cell, H = D.H;
   const texW = quality === 'high' ? 4096 : quality === 'medium' ? 2700 : 2048;
@@ -154,9 +199,12 @@ export function buildTerrain(D, Q, { quality = 'high', uniforms } = {}) {
   tex.colorSpace = THREE.SRGBColorSpace;
   tex.anisotropy = 8;
   tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
-  const material = terrainMaterial(tex, uniforms);
+  const material = terrainMaterial(tex, uniforms, { tileMask });
   const W = (NX - 1) * CELL, Dz = (NZ - 1) * CELL;
   const hAt = (i, j) => H[Math.min(NZ - 1, Math.max(0, j)) * NX + Math.min(NX - 1, Math.max(0, i))];
+  // the pilot patch (src/world/pilot.js) covers its box: sink this mesh under it. Vertices on the
+  // box edge stay put (the box is on this 8 m grid), so the two meshes meet without a crack.
+  const sinkAt = D.pilot ? pilotSink(D.pilot) : () => 0;
 
   function chunkGeometry(i0, i1, j0, j1, s, skirt) {
     const xs = [], zs = [];
@@ -170,7 +218,7 @@ export function buildTerrain(D, Q, { quality = 'high', uniforms } = {}) {
     const idx = [];
     let v = 0;
     const put = (i, j, dy) => {
-      const x = g.x0 + i * CELL, z = g.z0 + j * CELL, h = hAt(i, j);
+      const x = g.x0 + i * CELL, z = g.z0 + j * CELL, h0 = hAt(i, j), h = h0 - sinkAt(x, z, h0);
       pos[v * 3] = x; pos[v * 3 + 1] = h - dy; pos[v * 3 + 2] = z;
       const hx = (hAt(i + 1, j) - hAt(i - 1, j)) / (2 * CELL), hz = (hAt(i, j + 1) - hAt(i, j - 1)) / (2 * CELL);
       const l = Math.hypot(hx, 1, hz);
@@ -214,9 +262,9 @@ export function buildTerrain(D, Q, { quality = 'high', uniforms } = {}) {
   const lods = [];
   let tris0 = 0;
   const levels = quality === 'low' ? [[2, 0], [4, 1400]] : [[1, 0], [2, quality === 'high' ? 1500 : 1100], [4, 3000]];
-  for (let j0 = 0; j0 < NZ - 1; j0 += CHUNK_CELLS) {
-    for (let i0 = 0; i0 < NX - 1; i0 += CHUNK_CELLS) {
-      const i1 = Math.min(i0 + CHUNK_CELLS, NX - 1), j1 = Math.min(j0 + CHUNK_CELLS, NZ - 1);
+  for (let j0 = 0; j0 < NZ - 1; j0 += chunkCells) {
+    for (let i0 = 0; i0 < NX - 1; i0 += chunkCells) {
+      const i1 = Math.min(i0 + chunkCells, NX - 1), j1 = Math.min(j0 + chunkCells, NZ - 1);
       let mx = -1e9;
       for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) mx = Math.max(mx, H[j * NX + i]);
       if (mx < -2.5) continue;   // fully under the (opaque) water
@@ -227,7 +275,7 @@ export function buildTerrain(D, Q, { quality = 'high', uniforms } = {}) {
         const m = new THREE.Mesh(geo, material);
         m.receiveShadow = true;
         m.matrixAutoUpdate = false;
-        lod.addLevel(m, dist);
+        lod.addLevel(m, dist && dist + lodPad);
         if (s === levels[0][0]) tris0 += geo.index.count / 3;
       }
       // LOD distance is measured from the LOD object's position: put it at the chunk centre

@@ -1,0 +1,22 @@
+# Offline bake environment (conda-forge). Not needed to run the game.
+#   mamba env create -f tools/environment.yml
+#   mamba activate bake
+name: bake
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - numpy
+  - scipy
+  - matplotlib
+  - pdal
+  - python-pdal
+  - gdal
+  - rasterio
+  - geopandas
+  - shapely
+  - pyproj
+  - laspy
+  - lazrs-python
+  - osmium-tool
+  - pyosmium

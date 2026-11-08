@@ -1,0 +1,3 @@
+# bake byproducts (compiled Python embeds the absolute path of the machine that ran it)
+__pycache__/
+*.py[cod]

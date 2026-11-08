@@ -1,0 +1,309 @@
+{
+ "half_width_m": 125.0,
+ "boxes": [
+  {
+   "box": "Financial District",
+   "lat": 37.7925,
+   "lon": -122.399,
+   "project": "CA_SanFrancisco_1_B23",
+   "area_m2": 62500.0,
+   "total_points": 9141483,
+   "class_counts": {
+    "1": 7078320,
+    "2": 1941484,
+    "7": 58925,
+    "18": 62754
+   },
+   "class_counts_nonwithheld": {
+    "1": 7078320,
+    "2": 1941484
+   },
+   "withheld": 121679,
+   "overlap": 0,
+   "density_total": 146.26,
+   "density_nonwithheld": 144.32,
+   "density_first_return": 128.33,
+   "density_ground_c2": 31.06,
+   "has_3_4_5_6_17": {
+    "3": false,
+    "4": false,
+    "5": false,
+    "6": false,
+    "17": false
+   },
+   "z_min": -103.93,
+   "z_max": 267.44
+  },
+  {
+   "box": "Outer Sunset houses",
+   "lat": 37.76,
+   "lon": -122.49,
+   "project": "CA_SanFrancisco_1_B23",
+   "area_m2": 62500.0,
+   "total_points": 7585350,
+   "class_counts": {
+    "1": 4960176,
+    "2": 2620440,
+    "7": 4724,
+    "18": 10
+   },
+   "class_counts_nonwithheld": {
+    "1": 4960176,
+    "2": 2620440
+   },
+   "withheld": 4734,
+   "overlap": 0,
+   "density_total": 121.37,
+   "density_nonwithheld": 121.29,
+   "density_first_return": 111.63,
+   "density_ground_c2": 41.93,
+   "has_3_4_5_6_17": {
+    "3": false,
+    "4": false,
+    "5": false,
+    "6": false,
+    "17": false
+   },
+   "z_min": 61.39,
+   "z_max": 90.76
+  },
+  {
+   "box": "Golden Gate Park forest",
+   "lat": 37.7695,
+   "lon": -122.466,
+   "project": "CA_SanFrancisco_1_B23",
+   "area_m2": 62500.0,
+   "total_points": 7856196,
+   "class_counts": {
+    "1": 5758581,
+    "2": 2072468,
+    "7": 25147
+   },
+   "class_counts_nonwithheld": {
+    "1": 5758581,
+    "2": 2072468
+   },
+   "withheld": 25147,
+   "overlap": 0,
+   "density_total": 125.7,
+   "density_nonwithheld": 125.3,
+   "density_first_return": 90.39,
+   "density_ground_c2": 33.16,
+   "has_3_4_5_6_17": {
+    "3": false,
+    "4": false,
+    "5": false,
+    "6": false,
+    "17": false
+   },
+   "z_min": 68.93,
+   "z_max": 115.91
+  },
+  {
+   "box": "Bay Bridge west span over water",
+   "lat": 37.7985,
+   "lon": -122.377,
+   "project": "CA_SanFrancisco_1_B23",
+   "area_m2": 62500.0,
+   "total_points": 3090041,
+   "class_counts": {
+    "1": 1259921,
+    "7": 823,
+    "9": 1311074,
+    "17": 518219,
+    "18": 4
+   },
+   "class_counts_nonwithheld": {
+    "1": 1259921,
+    "9": 1311074,
+    "17": 518219
+   },
+   "withheld": 827,
+   "overlap": 0,
+   "density_total": 49.44,
+   "density_nonwithheld": 49.43,
+   "density_first_return": 47.68,
+   "density_ground_c2": 0.0,
+   "has_3_4_5_6_17": {
+    "3": false,
+    "4": false,
+    "5": false,
+    "6": false,
+    "17": true
+   },
+   "z_min": -7.72,
+   "z_max": 102.94
+  },
+  {
+   "box": "Downtown Oakland",
+   "lat": 37.8044,
+   "lon": -122.2712,
+   "project": "CA_AlamedaCo_2_2021",
+   "area_m2": 62500.0,
+   "total_points": 3121013,
+   "class_counts": {
+    "1": 2794795,
+    "2": 323534,
+    "7": 2422,
+    "18": 262
+   },
+   "class_counts_nonwithheld": {
+    "1": 2560848,
+    "2": 323534
+   },
+   "withheld": 236631,
+   "overlap": 0,
+   "density_total": 49.94,
+   "density_nonwithheld": 46.15,
+   "density_first_return": 39.79,
+   "density_ground_c2": 5.18,
+   "has_3_4_5_6_17": {
+    "3": false,
+    "4": false,
+    "5": false,
+    "6": false,
+    "17": false
+   },
+   "z_min": -109.23,
+   "z_max": 182.79
+  },
+  {
+   "box": "Downtown Oakland",
+   "lat": 37.8044,
+   "lon": -122.2712,
+   "project": "CA_AlamedaCo_3_2021",
+   "area_m2": 62500.0,
+   "total_points": 0,
+   "note": "0 points: no coverage"
+  },
+  {
+   "box": "Lake Merritt",
+   "lat": 37.802,
+   "lon": -122.257,
+   "project": "CA_AlamedaCo_2_2021",
+   "area_m2": 62500.0,
+   "total_points": 5589,
+   "class_counts": {
+    "7": 14,
+    "9": 3065,
+    "18": 2510
+   },
+   "class_counts_nonwithheld": {
+    "9": 3065
+   },
+   "withheld": 2524,
+   "overlap": 0,
+   "density_total": 0.09,
+   "density_nonwithheld": 0.05,
+   "density_first_return": 0.05,
+   "density_ground_c2": 0.0,
+   "has_3_4_5_6_17": {
+    "3": false,
+    "4": false,
+    "5": false,
+    "6": false,
+    "17": false
+   },
+   "z_min": 0.96,
+   "z_max": 1.98
+  },
+  {
+   "box": "Lake Merritt",
+   "lat": 37.802,
+   "lon": -122.257,
+   "project": "CA_AlamedaCo_3_2021",
+   "area_m2": 62500.0,
+   "total_points": 0,
+   "note": "0 points: no coverage"
+  },
+  {
+   "box": "Berkeley campus",
+   "lat": 37.87,
+   "lon": -122.2585,
+   "project": "CA_AlamedaCo_2_2021",
+   "area_m2": 62500.0,
+   "total_points": 0,
+   "note": "0 points: no coverage"
+  },
+  {
+   "box": "Berkeley campus",
+   "lat": 37.87,
+   "lon": -122.2585,
+   "project": "CA_AlamedaCo_3_2021",
+   "area_m2": 62500.0,
+   "total_points": 9773445,
+   "class_counts": {
+    "1": 9340038,
+    "2": 396200,
+    "7": 1833,
+    "17": 33810,
+    "18": 1564
+   },
+   "class_counts_nonwithheld": {
+    "1": 9060290,
+    "2": 396200,
+    "17": 33810
+   },
+   "withheld": 283145,
+   "overlap": 0,
+   "density_total": 156.38,
+   "density_nonwithheld": 151.84,
+   "density_first_return": 120.04,
+   "density_ground_c2": 6.34,
+   "has_3_4_5_6_17": {
+    "3": false,
+    "4": false,
+    "5": false,
+    "6": false,
+    "17": true
+   },
+   "z_min": 65.76,
+   "z_max": 135.06
+  },
+  {
+   "box": "MacArthur Maze",
+   "lat": 37.827,
+   "lon": -122.295,
+   "project": "CA_AlamedaCo_2_2021",
+   "area_m2": 62500.0,
+   "total_points": 1908308,
+   "class_counts": {
+    "1": 1295765,
+    "2": 443682,
+    "7": 1121,
+    "17": 167441,
+    "18": 299
+   },
+   "class_counts_nonwithheld": {
+    "1": 1295765,
+    "2": 443682,
+    "17": 167441
+   },
+   "withheld": 1420,
+   "overlap": 0,
+   "density_total": 30.53,
+   "density_nonwithheld": 30.51,
+   "density_first_return": 28.43,
+   "density_ground_c2": 7.1,
+   "has_3_4_5_6_17": {
+    "3": false,
+    "4": false,
+    "5": false,
+    "6": false,
+    "17": true
+   },
+   "z_min": -67.09,
+   "z_max": 86.7
+  },
+  {
+   "box": "MacArthur Maze",
+   "lat": 37.827,
+   "lon": -122.295,
+   "project": "CA_AlamedaCo_3_2021",
+   "area_m2": 62500.0,
+   "total_points": 0,
+   "note": "0 points: no coverage"
+  }
+ ],
+ "boxes_with_building_or_vegetation_classes": []
+}

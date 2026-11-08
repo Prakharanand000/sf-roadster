@@ -14,6 +14,11 @@
 //   path, grid behind it, last checkpoint = finish (path end).
 // - update() reads the first DirectionalLight in the scene for the water sun glint and scene.fog for the
 //   water horizon colour; env.night (0..1) also drives setNight() automatically.
+// - Optional pilot overlay (data/pilot.json + pilot.bin.wasm, tools/bake_pilot.py): lidar ground and
+//   measured road ribbons over Nob Hill + FiDi, see src/world/pilot.js. Loaded when present; add
+//   ?pilot=0 to the page URL to compare against the world without it.
+// - ?world=v2 loads the v2 world instead (src/world/v2/city2.js): the same World API over a bigger,
+//   tile-streamed map (data/v2/, tools/bake_v2.py).
 import * as THREE from 'three';
 import { fetchWorldFiles, decodeWorld, createQueries } from './worlddata.js';
 import { buildTracks, samplePath } from './tracks.js';
@@ -25,20 +30,37 @@ import { buildBuildings } from './buildings.js';
 import { buildTrees } from './trees.js';
 import { buildLandmarks } from './landmarks.js';
 import { drawMinimap } from './minimap.js';
+import { fetchPilotFiles, decodePilot, buildPilot, pilotMismatch } from './pilot.js';
 
 export const ATTRIBUTION = '© OpenStreetMap contributors (ODbL); elevation: Mapzen Terrarium / AWS Terrain Tiles';
 
 const tick = () => new Promise((r) => setTimeout(r, 0));
 
-/** Data-only world (no meshes, no DOM) - used by Node tests and tools. */
-export function createWorldData(index, buffer) {
+/** Data-only world (no meshes, no DOM) - used by Node tests and tools. `pilot` = optional { index, buffer }. */
+export function createWorldData(index, buffer, pilot = null) {
   const D = decodeWorld(index, buffer);
-  const Q = createQueries(D);
+  if (pilot) {
+    // the overlay is optional: a stale or broken pilot file falls back to the plain world
+    const bad = pilotMismatch(pilot.index, index, buffer);
+    if (bad) console.warn('pilot overlay skipped: ' + bad);
+    else {
+      try { D.pilot = decodePilot(pilot.index, pilot.buffer); } catch (e) { console.warn('pilot overlay skipped: ' + e.message); }
+    }
+  }
+  let Q;
+  try {
+    Q = createQueries(D);
+  } catch (e) {
+    if (!D.pilot) throw e;
+    console.warn('pilot overlay skipped: ' + e.message);
+    delete D.pilot;
+    Q = createQueries(D);
+  }
   const tracks = buildTracks(index, Q);
   return { D, Q, tracks, spawn: pickSpawn(index, tracks) };
 }
 
-function pickSpawn(index, tracks) {
+export function pickSpawn(index, tracks) {
   // The Embarcadero next to the Ferry Building, facing north (Bay Bridge behind, Coit Tower ahead)
   const t = tracks.find((k) => k.id === 'embarcadero-sprint') || tracks[0];
   const ferry = (index.landmarks || []).find((l) => l.id === 'ferry');
@@ -53,7 +75,16 @@ function pickSpawn(index, tracks) {
   return { x, z, heading: Math.atan2(px - x, pz - z) };
 }
 
-export async function loadWorld(scene, { quality = 'high', onProgress, dataUrl } = {}) {
+export async function loadWorld(scene, opts = {}) {
+  // ?world=v2 on the page URL: the streamed v2 world (all of SF and the East Bay, src/world/v2/)
+  if (typeof location !== 'undefined' && /[?&]world=v2(&|$)/.test(location.search)) {
+    const { loadWorld2 } = await import('./v2/city2.js');
+    return loadWorld2(scene, opts);
+  }
+  return loadWorld1(scene, opts);
+}
+
+async function loadWorld1(scene, { quality = 'high', onProgress, dataUrl } = {}) {
   const prog = (f, m) => { try { if (onProgress) onProgress(f, m); } catch (e) { /* ignore UI errors */ } };
   const t0 = performance.now();
   const stageMs = {};
@@ -61,11 +92,12 @@ export async function loadWorld(scene, { quality = 'high', onProgress, dataUrl }
   const lap = (name) => { const n = performance.now(); stageMs[name] = Math.round(n - tl); tl = n; };
   prog(0.01, 'Downloading San Francisco');
   const base = dataUrl || new URL('../../data/', import.meta.url).href;
-  const { index, buffer } = await fetchWorldFiles(base);
+  const wantPilot = !(typeof location !== 'undefined' && /[?&]pilot=0(&|$)/.test(location.search));
+  const [{ index, buffer }, pilotFiles] = await Promise.all([fetchWorldFiles(base), wantPilot ? fetchPilotFiles(base) : null]);
   lap('fetch');
   prog(0.2, 'Decoding map data');
   await tick();
-  const { D, Q, tracks, spawn } = createWorldData(index, buffer);
+  const { D, Q, tracks, spawn } = createWorldData(index, buffer, pilotFiles);
   const uniforms = { uNight: { value: 0 }, uTime: { value: 0 }, lampMaterials: [], animated: [] };
   const group = new THREE.Group();
   group.name = 'sf-world';
@@ -90,6 +122,14 @@ export async function loadWorld(scene, { quality = 'high', onProgress, dataUrl }
   group.add(roads.group);
 
   lap('roads');
+  let pilot = null;
+  if (D.pilot) {
+    prog(0.56, 'Laying the lidar streets');
+    await tick();
+    pilot = buildPilot(D, Q, { quality, groundTexture: terrain.texture, uniforms, roadMaterial: roads.material });
+    group.add(pilot.group);
+    lap('pilot');
+  }
   prog(0.62, 'Raising the skyline');
   await tick();
   const buildings = buildBuildings(D, Q, { quality, uniforms });
@@ -131,6 +171,7 @@ export async function loadWorld(scene, { quality = 'high', onProgress, dataUrl }
     water.update(dt, camera, { night: nightVal }, scene);
     buildings.update(camera);
     roads.update(camera);
+    if (pilot) pilot.update(camera);
     trees.update(camera);
     for (const f of uniforms.animated) f(uniforms.uTime.value);
   }
@@ -159,7 +200,9 @@ export async function loadWorld(scene, { quality = 'high', onProgress, dataUrl }
     triangles: {
       terrainLod0: terrain.stats.trianglesLod0, roads: roads.stats.triangles, buildings: buildings.stats.triangles,
       trees: trees.stats.triangles,
+      ...(pilot ? { pilotTerrainLod0: pilot.stats.terrainTrianglesLod0, pilotRibbons: pilot.stats.ribbonTriangles } : {}),
     },
+    pilot: D.pilot ? { box: D.pilot.bbox, stations: D.pilot.N, segments: Q.pilot.segments } : null,
   };
   prog(1, 'Welcome to San Francisco');
 
@@ -189,7 +232,7 @@ export async function loadWorld(scene, { quality = 'high', onProgress, dataUrl }
     group,
     quality,
     stats,
-    attribution: ATTRIBUTION,
+    attribution: D.pilot ? ATTRIBUTION + '; ' + D.pilot.index.attribution : ATTRIBUTION,
     data: D,
   };
 }
