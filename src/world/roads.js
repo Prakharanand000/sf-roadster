@@ -97,6 +97,21 @@ diffuseColor.rgb = rc;`)
   return mat;
 }
 
+/** Marking attributes for the road shader: info = centre type + 4 * lanes, fl = bit flags. */
+export function markingInfo(r) {
+  const t = r.type;
+  let ctype = 0;
+  if (!r.oneway && (MAJOR.has(t) || r.lanes >= 2) && t !== 'service' && !t.endsWith('_link')) ctype = 1;
+  if (!r.oneway && ctype === 0 && t === 'unclassified') ctype = 2;
+  const lanes = r.lanes || (r.oneway ? Math.max(1, Math.round(r.width / 3.6)) : MAJOR.has(t) ? Math.max(2, Math.round(r.width / 3.5) & ~1) : 0);
+  let fl = 0;
+  if (t.startsWith('motorway') || t === 'trunk' || r.bridge) fl |= 1;
+  if (r.cableCar) fl |= 2;
+  if (MAJOR.has(t) || t === 'residential') fl |= 4;
+  if (r.oneway) fl |= 8;
+  return { info: ctype + 4 * Math.min(lanes, 8), fl };
+}
+
 /** Junction lookup: quantised coordinate -> radius */
 function junctionMap(J) {
   const m = new Map();
@@ -104,11 +119,20 @@ function junctionMap(J) {
   return m;
 }
 
-export function buildRoads(D, Q, { quality = 'high', uniforms } = {}) {
-  const material = createRoadMaterial(uniforms);
+/**
+ * Options for the v2 world, which builds roads one 512 m tile at a time (defaults = v1 behaviour):
+ * - material / lights: shared road material and street-light materials ({ pole, head, points });
+ * - clip {x0,z0,x1,z1}: emit only quads whose segment midpoint, and lamps whose base, is inside;
+ * - chunk: mesh chunk size in metres; deckLamps: false skips the Golden Gate deck lamps.
+ * Road pieces may carry s0 (distance along the full road at points[0], so dashes and lamps line
+ * up across tiles) and keepPts (per point: never simplify it away, e.g. tile-edge crossings).
+ */
+export function buildRoads(D, Q, { quality = 'high', uniforms, material: sharedMaterial, lights: sharedLights, clip = null, chunk = CHUNK, deckLamps = true } = {}) {
+  const material = sharedMaterial || createRoadMaterial(uniforms);
   const jmap = junctionMap(D.junctions);
   const g = D.grid;
-  const NCX = Math.ceil((g.nx * g.cell) / CHUNK);
+  const NCX = Math.ceil((g.nx * g.cell) / chunk);
+  const inClip = (x, z) => !clip || (x >= clip.x0 && x < clip.x1 && z >= clip.z0 && z < clip.z1);
   const chunkBufs = new Map();
   const lamps = [];
   const walks = quality !== 'low';
@@ -118,6 +142,8 @@ export function buildRoads(D, Q, { quality = 'high', uniforms } = {}) {
     return b;
   };
   const tmpN = new THREE.Vector3();
+  const pil = Q.pilot || null;
+  const lampTmp = [0, 0];
 
   for (let ri = 0; ri < D.roads.length; ri++) {
     const r = D.roads[ri];
@@ -129,7 +155,8 @@ export function buildRoads(D, Q, { quality = 'high', uniforms } = {}) {
     // densify to <= 4 m, record along distance and junction markers
     const xs = [], zs = [], ss = [];
     const jpos = [];  // [s, radius]
-    let s = 0;
+    const fixed = [];  // densified indices of keepPts points
+    let s = r.s0 || 0;
     for (let i = 0; i < P.length; i++) {
       const [x, z] = P[i];
       if (i > 0) {
@@ -140,10 +167,13 @@ export function buildRoads(D, Q, { quality = 'high', uniforms } = {}) {
         s += L;
       }
       xs.push(x); zs.push(z); ss.push(s);
+      if (r.keepPts && r.keepPts[i]) fixed.push(xs.length - 1);
       const jr = jmap.get(Math.round(x * 4) + ',' + Math.round(z * 4));
       if (jr !== undefined) jpos.push([s, jr]);
     }
     const n = xs.length;
+    const fk = new Uint8Array(n);
+    for (const k of fixed) fk[k] = 1;
     // per point: heights (left/right edges), lateral normal, junction distance
     const lx = new Float32Array(n), lz = new Float32Array(n), jd = new Float32Array(n);
     for (let i = 0; i < n; i++) {
@@ -166,7 +196,10 @@ export function buildRoads(D, Q, { quality = 'high', uniforms } = {}) {
       jd[i] = d;
     }
     // heights
-    const hgt = isBridge ? (x, z) => Q.groundHeight(x, z) : (x, z) => Q.heightAt(x, z);
+    // a bridge road on its own deck where the world knows it (v2: decks can stack or cross), else the
+    // top deck there (v1: the Golden Gate is the only one)
+    const ownDeck = isBridge && Q.roadDeckAt ? (x, z) => Q.roadDeckAt(r.index !== undefined ? r.index : ri, x, z) : null;
+    const hgt = !isBridge ? (x, z) => Q.heightAt(x, z) : ownDeck ? (x, z) => { const v = ownDeck(x, z); return v === v ? v : Q.groundHeight(x, z); } : (x, z) => Q.groundHeight(x, z);
     const hl = new Float32Array(n), hr = new Float32Array(n), hc = new Float32Array(n);
     for (let i = 0; i < n; i++) {
       hl[i] = hgt(xs[i] + lx[i] * hw, zs[i] + lz[i] * hw);
@@ -192,6 +225,9 @@ export function buildRoads(D, Q, { quality = 'high', uniforms } = {}) {
           if (Math.hypot(ex - xs[m], ez - zs[m]) > 0.15) ok = false;
           // keep junction-zone transitions for markings / sidewalks
           if ((jd[m] > 0) !== (jd[a] > 0) || (jd[m] > 4) !== (jd[a] > 4)) ok = false;
+          if (fk[m]) ok = false;
+          // keep short segments at the pilot box edge so the hand-over to pilot ribbons is tight
+          if (pil && (pil.contains(xs[m], zs[m]) !== pil.contains(xs[a], zs[a]) || pil.contains(xs[c], zs[c]) !== pil.contains(xs[a], zs[a]))) ok = false;
         }
         if (!ok) break;
         b = c;
@@ -203,25 +239,17 @@ export function buildRoads(D, Q, { quality = 'high', uniforms } = {}) {
     for (let i = 0; i < n; i++) if (keep[i]) ids.push(i);
     // marking info
     const t = r.type;
-    let ctype = 0;
-    if (!r.oneway && (MAJOR.has(t) || r.lanes >= 2) && t !== 'service' && !t.endsWith('_link')) ctype = 1;
-    if (!r.oneway && ctype === 0 && t === 'unclassified') ctype = 2;
-    const lanes = r.lanes || (r.oneway ? Math.max(1, Math.round(r.width / 3.6)) : MAJOR.has(t) ? Math.max(2, Math.round(r.width / 3.5) & ~1) : 0);
-    let fl = 0;
-    if (t.startsWith('motorway') || t === 'trunk' || r.bridge) fl |= 1;
-    if (r.cableCar) fl |= 2;
-    if (MAJOR.has(t) || t === 'residential') fl |= 4;
-    if (r.oneway) fl |= 8;
-    const info = ctype + 4 * Math.min(lanes, 8);
+    const { info, fl } = markingInfo(r);
     const sidewalk = walks && r.sidewalk && !r.bridge;
+    const pilotRoad = pil && pil.coversRoad(r.index !== undefined ? r.index : ri);   // (v2 tile pieces carry their net road index) roads the pilot skipped (bridge-flagged ones) stay here
 
     // emit per chunk (split by chunk of segment midpoint)
-    let cur = null, curKey = -1;
+    let cur = null, curKey = null;   // keys can be negative (v2 tile margins)
     let prevL = -1;  // vertex index of previous road pair in current buffer
     let prevW = null;
     for (let q = 0; q < ids.length; q++) {
       const i = ids[q];
-      const ci = Math.floor((xs[i] - g.x0) / CHUNK), cj = Math.floor((zs[i] - g.z0) / CHUNK);
+      const ci = Math.floor((xs[i] - g.x0) / chunk), cj = Math.floor((zs[i] - g.z0) / chunk);
       const key = cj * NCX + ci;
       if (key !== curKey) {
         // start new strip in this chunk, but connect with previous point (duplicate it)
@@ -235,11 +263,16 @@ export function buildRoads(D, Q, { quality = 'high', uniforms } = {}) {
         cur = nb; curKey = key;
       }
       const v = emitRoadPair(cur, i);
-      if (prevL >= 0) pushQuad(cur, prevL, prevL + 1, v, v + 1);
+      // inside the pilot box the pilot draws this road (src/world/pilot.js)
+      const mx = (xs[i] + xs[ids[q - 1]]) / 2, mz = (zs[i] + zs[ids[q - 1]]) / 2;
+      // ...but only where a pilot ribbon is actually there (the bake drops a road's stations under another road)
+      const covered = pilotRoad && q > 0 && pil.contains(mx, mz) && pil.ribbonAt(mx, mz) === pil.ribbonAt(mx, mz);
+      const mine = q > 0 && inClip(mx, mz);
+      if (prevL >= 0 && !covered && mine) pushQuad(cur, prevL, prevL + 1, v, v + 1);
       prevL = v;
       if (sidewalk) {
         const w = emitWalkSet(cur, i);
-        if (prevW && jd[i] > 0.0 && jd[ids[q - 1]] > 0.0) {
+        if (prevW && !covered && mine && jd[i] > 0.0 && jd[ids[q - 1]] > 0.0) {
           for (const side of [0, 1]) {
             const p = prevW + side * 4, c = w + side * 4;
             // curb face (p0 bottom, p1 top), walk (p2 inner, p3 outer)
@@ -254,15 +287,24 @@ export function buildRoads(D, Q, { quality = 'high', uniforms } = {}) {
     if (LIT.has(t) && !r.bridge) {
       const spacing = r.bridge ? 50 : 34;
       let next = spacing * 0.5, side = 1;
+      // a road piece (v2 tile) starts mid-road: continue the full road's lamp sequence, and take the
+      // side from the lamp's number so every tile agrees on it
+      const piece = r.s0 !== undefined;
+      let lampNo = 0;
+      if (piece) { lampNo = Math.max(0, Math.ceil((r.s0 - spacing * 0.5) / spacing)); next = spacing * 0.5 + lampNo * spacing; }
       for (let i = 0; i < n; i++) {
         if (ss[i] < next) continue;
         next += spacing;
+        if (piece) side = lampNo++ % 2 ? -1 : 1;
         if (!r.bridge && jd[i] < 6) continue;
         const sd = r.bridge ? 1 : side;
-        side = -side;
+        if (!piece) side = -side;
         const off = hw + (r.bridge ? 0.2 : sidewalk ? 1.2 : 0.8);
         for (const s2 of r.bridge ? [1, -1] : [sd]) {
-          const px = xs[i] + lx[i] * off * s2, pz = zs[i] + lz[i] * off * s2;
+          let px = xs[i] + lx[i] * off * s2, pz = zs[i] + lz[i] * off * s2;
+          // pilot roads are measured wider than OSM: stand the pole on the measured sidewalk
+          if (pil && pil.toSidewalk(px, pz, lampTmp)) { px = lampTmp[0]; pz = lampTmp[1]; }
+          if (!inClip(px, pz)) continue;
           const base = hgt(px, pz);
           lamps.push(px, base, pz, -lx[i] * s2, -lz[i] * s2);
         }
@@ -271,8 +313,9 @@ export function buildRoads(D, Q, { quality = 'high', uniforms } = {}) {
 
     function emitRoadPair(buf, i) {
       const v = buf.n;
-      Q.normalAt(xs[i], zs[i], isBridge ? 1e4 : -1e3, tmpN);
-      if (!isBridge) Q.normalAt(xs[i], zs[i], hc[i] + 0.5, tmpN);
+      // v2 (roadDeckAt): the deck at this road's own height, not the spawn rule of a no-reference query
+      Q.normalAt(xs[i], zs[i], isBridge && !ownDeck ? 1e4 : -1e3, tmpN);
+      if (!isBridge || ownDeck) Q.normalAt(xs[i], zs[i], hc[i] + 0.5, tmpN);
       for (const sgn of [1, -1]) {
         const x = xs[i] + lx[i] * hw * sgn, z = zs[i] + lz[i] * hw * sgn;
         buf.pos.push(x, (sgn > 0 ? hl[i] : hr[i]) + ROAD_Y, z);
@@ -306,7 +349,7 @@ export function buildRoads(D, Q, { quality = 'high', uniforms } = {}) {
   }
 
   // Golden Gate deck lamps along the outer edges (every 50 m)
-  if (Q.deck) {
+  if (Q.deck && deckLamps) {
     const P = Q.deck, lr = [0, 0];
     for (let t = P.tmin + 25; t < P.tmax - 25; t += 50) {
       P.lateralRange(t, lr);
@@ -343,7 +386,7 @@ export function buildRoads(D, Q, { quality = 'high', uniforms } = {}) {
   }
 
   // ---- street lights: poles (merged per chunk) + glow points
-  const lights = buildStreetLights(lamps, quality, uniforms);
+  const lights = buildStreetLights(lamps, quality, uniforms, sharedLights);
   group.add(lights.group);
 
   const dist = quality === 'high' ? 2600 : quality === 'medium' ? 1700 : 1100;
@@ -360,20 +403,8 @@ function pushQuad(b, a0, a1, b0, b1) {
   b.idx.push(a0, b0, a1, a1, b0, b1);
 }
 
-function buildStreetLights(lamps, quality, uniforms) {
-  const group = new THREE.Group();
-  group.name = 'streetlights';
-  const n = lamps.length / 5;
-  const H = 8.5;
-  // glow points
-  const gpos = new Float32Array(n * 3);
-  for (let i = 0; i < n; i++) {
-    const x = lamps[i * 5], y = lamps[i * 5 + 1], z = lamps[i * 5 + 2], dx = lamps[i * 5 + 3], dz = lamps[i * 5 + 4];
-    const dl = Math.hypot(dx, dz) || 1;
-    gpos[i * 3] = x + (dx / dl) * 1.6; gpos[i * 3 + 1] = y + H - 0.3; gpos[i * 3 + 2] = z + (dz / dl) * 1.6;
-  }
-  const pg = new THREE.BufferGeometry();
-  pg.setAttribute('position', new THREE.BufferAttribute(gpos, 3));
+/** Street-light materials: glow points, poles, heads (heads join uniforms.lampMaterials for setNight). */
+export function createStreetLightMaterials(uniforms) {
   const pmat = new THREE.ShaderMaterial({
     uniforms: THREE.UniformsUtils.merge([THREE.UniformsLib.fog, { uNight: { value: 0 }, uScale: { value: 900 } }]),
     vertexShader: `uniform float uScale; uniform float uNight;
@@ -392,6 +423,27 @@ function buildStreetLights(lamps, quality, uniforms) {
     transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: true,
   });
   pmat.uniforms.uNight = uniforms.uNight;
+  const pole = new THREE.MeshStandardMaterial({ color: 0x55595e, roughness: 0.6, metalness: 0.6 });
+  const head = new THREE.MeshStandardMaterial({ color: 0x777b80, roughness: 0.5, metalness: 0.4, emissive: new THREE.Color(1.0, 0.8, 0.5), emissiveIntensity: 0 });
+  uniforms.lampMaterials.push(head);
+  return { points: pmat, pole, head };
+}
+
+function buildStreetLights(lamps, quality, uniforms, mats) {
+  const group = new THREE.Group();
+  group.name = 'streetlights';
+  const n = lamps.length / 5;
+  const H = 8.5;
+  // glow points
+  const gpos = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) {
+    const x = lamps[i * 5], y = lamps[i * 5 + 1], z = lamps[i * 5 + 2], dx = lamps[i * 5 + 3], dz = lamps[i * 5 + 4];
+    const dl = Math.hypot(dx, dz) || 1;
+    gpos[i * 3] = x + (dx / dl) * 1.6; gpos[i * 3 + 1] = y + H - 0.3; gpos[i * 3 + 2] = z + (dz / dl) * 1.6;
+  }
+  const pg = new THREE.BufferGeometry();
+  pg.setAttribute('position', new THREE.BufferAttribute(gpos, 3));
+  const { points: pmat, pole: pmat2, head: headMat } = mats || createStreetLightMaterials(uniforms);
   const points = new THREE.Points(pg, pmat);
   points.frustumCulled = false;
   points.renderOrder = 5;
@@ -408,9 +460,6 @@ function buildStreetLights(lamps, quality, uniforms) {
       if (!b) buckets.set(key, (b = []));
       b.push(i);
     }
-    const pmat2 = new THREE.MeshStandardMaterial({ color: 0x55595e, roughness: 0.6, metalness: 0.6 });
-    const headMat = new THREE.MeshStandardMaterial({ color: 0x777b80, roughness: 0.5, metalness: 0.4, emissive: new THREE.Color(1.0, 0.8, 0.5), emissiveIntensity: 0 });
-    uniforms.lampMaterials.push(headMat);
     const box = (w, h, d) => new THREE.BoxGeometry(w, h, d);
     for (const [, list] of buckets) {
       const poleParts = [], headParts = [];

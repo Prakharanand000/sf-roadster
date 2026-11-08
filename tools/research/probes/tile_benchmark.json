@@ -1,0 +1,158 @@
+{
+ "tile": {
+  "i": -2,
+  "j": -2,
+  "x_range": [
+   -1024.0,
+   -512.0
+  ],
+  "z_range": [
+   -1024.0,
+   -512.0
+  ],
+  "easting_range": [
+   -1024.0,
+   -512.0
+  ],
+  "northing_range": [
+   512.0,
+   1024.0
+  ],
+  "centre_lat_lon": [
+   37.79491906164708,
+   -122.41621969307762
+  ],
+  "query_point_sft1": [
+   -572.5120228920504,
+   554.9824807594189
+  ],
+  "project": "CA_SanFrancisco_1_B23"
+ },
+ "fetch": {
+  "points_loaded_incl_quadrant_overlap": 24917194,
+  "points_in_tile_plus_4m_margin": 24149668,
+  "laz_bytes_total": 119374751,
+  "laz_mb": 119.37,
+  "fetch_s": 35.11,
+  "load_s": 8.82,
+  "fetch_was_cached": false,
+  "quadrants": 4,
+  "class_histogram": {
+   "1": 18628600,
+   "2": 5471652,
+   "7": 30338,
+   "17": 19073,
+   "18": 5
+  },
+  "withheld_count": 30343,
+  "ground_points_class2_not_withheld": 5471652
+ },
+ "dtm": {
+  "method": "median z of non-withheld class-2 points in a step-sized cell centred on each sample",
+  "grid_2m": {
+   "samples": 259,
+   "step_m": 2.0,
+   "hole_fraction_before_fill": 0.37865,
+   "points_per_cell_median": 113.0,
+   "fill_s": 2.29,
+   "median_s": 1.14
+  },
+  "grid_0p5m": {
+   "samples": 1024,
+   "step_m": 0.5,
+   "hole_fraction": 0.55445,
+   "points_per_cell_median": 12.0,
+   "median_s": 1.25
+  }
+ },
+ "dsm": {
+  "res_m": 0.5,
+  "shape": [
+   1024,
+   1024
+  ],
+  "empty_cell_fraction": 0.00352,
+  "zmin": 53.54999923706055,
+  "zmax": 208.82000732421875,
+  "build_s_incl_in_split_dsm_accumulate": 4.88
+ },
+ "encode": {
+  "hBase_m": 53.47999954223633,
+  "q_clipped_samples": 0,
+  "raw_uint16_bytes": 134162,
+  "gzip9_plain_bytes": 103380,
+  "gzip9_row_delta_zigzag_bytes": 69270,
+  "gzip9_planar_predictor_zigzag_bytes": 63660,
+  "proposal_estimate": {
+   "HGT_raw_bytes": 133693,
+   "q_tile_gz_bytes_all_sections": 70000,
+   "q_gz_per_km2_bytes": [
+    250000,
+    300000
+   ],
+   "note": "proposal \u00a72.4 states 510 KB raw per km2; scaled to one 0.262 km2 tile (corrected after review)"
+  },
+  "note": "HGT section alone measured; proposal's ~70 KB/tile covers all q sections (HGT, RIB, SOL, LC...).",
+  "encode_s": 0.124
+ },
+ "sanity": {
+  "slope_pct_max": 414.25748051697093,
+  "slope_pct_p95": 54.893051271929224,
+  "slope_pct_p99": 103.82395541549927,
+  "height_min_m": 53.47999954223633,
+  "height_max_m": 115.76000213623047,
+  "height_navd88_note": "lidar Z is NAVD88 m; Terrarium is not NAVD88"
+ },
+ "terrarium": {
+  "covers_tile": true,
+  "tiles_used": [
+   [
+    2620,
+    2620
+   ],
+   [
+    6331,
+    6331
+   ]
+  ],
+  "valid_fraction": 1.0,
+  "mean_diff_m": 0.3141368494156881,
+  "std_diff_m": 1.3142714397071127,
+  "rms_diff_m": 1.3512924840280216,
+  "max_abs_diff_m": 11.018786466766613,
+  "p95_abs_diff_m": 2.867552966801213,
+  "rms_after_removing_mean_m": 1.3142714397071127,
+  "diff_definition": "lidar DTM (NAVD88) minus Terrarium bilinear at the 259x259 sample positions",
+  "terrarium_min_max_m": [
+   53.8345088288421,
+   108.50248957564558
+  ]
+ },
+ "stage_seconds": {
+  "fetch_s": 35.11,
+  "load_s": 8.82,
+  "split_dsm_accumulate_s": 4.88,
+  "dtm_2m_median_s": 1.14,
+  "dtm_2m_fill_s": 2.29,
+  "dtm_0p5m_median_s": 1.25,
+  "dsm_finalise_s": 0.0,
+  "encode_s": 0.12,
+  "terrarium_s": 0.04,
+  "png_s": 0.98
+ },
+ "projection": {
+  "tile_count": 1300,
+  "tile_count_source": "tile-format-proposal.md 2.10: q and r for ~1,300 land tiles (~330 km2 / 0.262 km2 = ~1,260)",
+  "per_tile_fetch_load_bake_s": 53.6,
+  "fetch_only_s_per_tile": 35.1,
+  "fetch_was_cached_so_download_time_unreliable": false,
+  "single_thread_total_hours": 19.36,
+  "laz_total_gb": 155.19,
+  "hgt_gz_best_total_mb": 82.8,
+  "hgt_gz_plain_total_mb": 134.4,
+  "proposal_q_total_mb_at_70kb": 91.0,
+  "caveats": "Nob Hill is dense urban; water-edge and park tiles have fewer points; open-water slots are skipped.",
+  "parallelises": "tiles are independent (fetch, PDAL EPT read, median/fill, encode); fetch is network bound, DTM/DSM/encode CPU bound per tile; quadrant fetches within a tile also parallel. Serial: manifest write, seam checks across neighbours (shared border row must match)."
+ },
+ "total_script_wall_s": 55.2
+}

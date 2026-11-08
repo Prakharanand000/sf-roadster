@@ -10,8 +10,12 @@
 // - collideCircle additionally skips solids whose base is more than 3 m above the car base (so a car
 //   on the water under the bridge does not hit the deck railings). This only removes impossible hits.
 // - surfaceAt for paved non-road urban ground (plazas, lots, piers) returns 'sidewalk'; woods/parks 'grass'.
+// - With the optional pilot overlay (D.pilot, src/world/pilot.js), heightAt inside its box is lidar
+//   ground plus measured road ribbons (crown, gutters, curbs); surfaceAt uses the measured road and
+//   sidewalk bands there, and buildings in the box take their ground range from that surface.
 import * as THREE from 'three';
 import { buildLandmarkSolids, makeDeckProfile } from './landmarkdefs.js';
+import { createPilotQueries } from './pilot.js';
 
 export const LC = { WATER: 0, URBAN: 1, PARK: 2, WOOD: 3, SAND: 4, LAKE: 5, PIER: 6, PITCH: 7, SCRUB: 8, ROCK: 9, PAVED: 10 };
 const LC_SURFACE = ['water', 'sidewalk', 'grass', 'grass', 'sand', 'water', 'sidewalk', 'grass', 'grass', 'sidewalk', 'sidewalk'];
@@ -112,7 +116,7 @@ export function createQueries(D) {
   const INV = 1 / CELL;
   const bounds = { ...D.index.bounds };
 
-  function heightAt(x, z) {
+  function gridHeightAt(x, z) {
     let fx = (x - GX0) * INV, fz = (z - GZ0) * INV;
     if (fx < 0) fx = 0; else if (fx > NX - 1.0001) fx = NX - 1.0001;
     if (fz < 0) fz = 0; else if (fz > NZ - 1.0001) fz = NZ - 1.0001;
@@ -124,6 +128,23 @@ export function createQueries(D) {
     }
     const h11 = H[o + NX + 1];
     return h11 + (H[o + NX] - h11) * (1 - tx) + (H[o + 1] - h11) * (1 - tz);
+  }
+  // pilot overlay (src/world/pilot.js): lidar ground + measured road ribbons inside its box
+  const PQ = D.pilot ? createPilotQueries(D.pilot, gridHeightAt) : null;
+  const heightAt = PQ ? PQ.heightAt : gridHeightAt;
+  if (PQ) {
+    // buildings in the box stand on the lidar ground: re-measure their ground range there
+    for (let k = 0; k < B.count; k++) {
+      const s = B.start[k], n = B.n[k];
+      let lo = Infinity, hi = -Infinity, any = false;
+      for (let i = 0; i < n; i++) {
+        const x = B.xz[(s + i) * 2], z = B.xz[(s + i) * 2 + 1];
+        if (PQ.contains(x, z)) any = true;
+        const hv = heightAt(x, z);
+        if (hv < lo) lo = hv; if (hv > hi) hi = hv;
+      }
+      if (any) { B.gmin[k] = lo; B.gmax[k] = hi; }
+    }
   }
 
   // ---- landcover
@@ -353,6 +374,11 @@ export function createQueries(D) {
     if (_kind === 1) return 'roof';
     if (_kind === 2) return 'bridge';
     if (terrainIsWater(x, z, h)) return 'water';
+    if (PQ) {
+      const k = PQ.surfaceKind(x, z);
+      if (k === 1) return 'road';
+      if (k === 2) return 'sidewalk';
+    }
     const r = roadAt(x, z);
     if (r === 1) return 'road';
     if (r === 2) return 'sidewalk';
@@ -419,5 +445,6 @@ export function createQueries(D) {
   return {
     bounds, heightAt, surfaceHeight, groundHeight, normalAt, surfaceAt, isWater, collideCircle,
     landcoverAt, roadAt, roadHit, deckAt, deck, solidAt, lakes, solids: S, solidCount: nSol, landmarkSolids: lmSolids,
+    pilot: PQ, baseHeightAt: gridHeightAt,
   };
 }

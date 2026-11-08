@@ -214,28 +214,53 @@ export function buildLandmarks(D, Q, { quality = 'high', uniforms } = {}) {
     const proj = (p) => (p[0] - a[0]) * (dx / L) + (p[1] - a[1]) * (dz / L);
     const towers = (l.towers || []).map(proj).sort((x, y) => x - y);
     const anch = l.anchorage ? proj(l.anchorage) : L / 2;
-    const deckY = (t) => Math.min(58, 26 + Math.max(0, t) * 0.11);
+    // v2 bakes measure the deck (lidar, tools/baybridge_v2.py) and lay both directions side by side
+    // at the upper deck's height: follow that profile and stand the towers and cables outside it.
+    // The drivable deck, its girder and the approach piers are drawn by src/world/v2/structures2.js.
+    const measured = Array.isArray(l.deck) && l.deck.length > 2;
+    const half = measured ? Math.max(10.5, l.deckHalf || 10.5) : 10.5;
+    const legX = measured ? half + 3.5 : 13, cabX = measured ? half + 2.5 : 12;   // v1: 13 / 12
+    const deckY = measured ? (t) => {
+      const P = l.deck;
+      if (t <= P[0][0]) return P[0][1];
+      for (let k = 1; k < P.length; k++) {
+        if (t <= P[k][0]) { const u = (t - P[k - 1][0]) / (P[k][0] - P[k - 1][0]); return P[k - 1][1] + (P[k][1] - P[k - 1][1]) * u; }
+      }
+      return P[P.length - 1][1];
+    } : (t) => Math.min(58, 26 + Math.max(0, t) * 0.11);
     const parts = [], conc = [], cables = [], bayLights = [];
-    for (let t = 0; t < L; t += 25) {
-      const y0 = deckY(t), y1 = deckY(Math.min(L, t + 25));
-      const ym = (y0 + y1) / 2;
-      parts.push(box(21, 8.5, 25.5, 0, ym - 8.5, t + 12.5));
-      const wx = a[0] + (dx / L) * (t + 12.5), wz = a[1] + (dz / L) * (t + 12.5);
-      if (Math.round(t) % 75 === 0) {
-        const gnd = Math.max(-5, Q.heightAt(wx, wz));
-        if (ym - 8.5 - gnd > 3) for (const sx of [-1, 1]) conc.push(box(3.5, ym - 8.5 - gnd + 5, 5, sx * 7, gnd - 5, t + 12.5));
+    if (!measured) {
+      for (let t = 0; t < L; t += 25) {
+        const y0 = deckY(t), y1 = deckY(Math.min(L, t + 25));
+        const ym = (y0 + y1) / 2;
+        parts.push(box(21, 8.5, 25.5, 0, ym - 8.5, t + 12.5));
+        const wx = a[0] + (dx / L) * (t + 12.5), wz = a[1] + (dz / L) * (t + 12.5);
+        if (Math.round(t) % 75 === 0) {
+          const gnd = Math.max(-5, Q.heightAt(wx, wz));
+          if (ym - 8.5 - gnd > 3) for (const sx of [-1, 1]) conc.push(box(3.5, ym - 8.5 - gnd + 5, 5, sx * 7, gnd - 5, t + 12.5));
+        }
       }
     }
     const TH = 150;
     for (const tt of towers) {
-      for (const sx of [-1, 1]) parts.push(taperBox(6, 7, 4.5, 5, TH + 5, sx * 13, -5, tt));
-      for (const y of [70, 100, 125, 148]) parts.push(box(26, 3, 3, 0, y, tt));
-      conc.push(box(40, 10, 22, 0, -6, tt));
+      for (const sx of [-1, 1]) parts.push(taperBox(6, 7, 4.5, 5, TH + 5, sx * legX, -5, tt));
+      for (const y of [70, 100, 125, 148]) if (!measured || y > deckY(tt) + 6) parts.push(box(2 * legX, 3, 3, 0, y, tt));
+      conc.push(box(measured ? Math.max(40, 2 * legX + 14) : 40, 10, 22, 0, -6, tt));
     }
-    conc.push(taperBox(46, 70, 38, 56, 96, 0, -8, anch));   // central anchorage
+    const anchTop = measured ? Math.max(88, deckY(anch) + 10) : 88;
+    if (measured) {
+      // central anchorage: the pier up to just under the deck, cable housings either side above it
+      const under = deckY(anch) - 2;
+      conc.push(taperBox(Math.max(46, 2 * legX + 10), 70, Math.max(38, 2 * legX + 4), 56, under + 8, 0, -8, anch));
+      for (const sx of [-1, 1]) conc.push(box(6, anchTop + 4 - under, 40, sx * (legX + 1), under, anch));
+    } else {
+      conc.push(taperBox(46, 70, 38, 56, 96, 0, -8, anch));   // central anchorage
+    }
     // cables: SF anchor (t=towers[0]-350) -> W2 -> W3 -> anchorage -> W5 -> W6 -> YBI
     const tw = towers.length === 4 ? towers : [L * 0.15, L * 0.38, L * 0.62, L * 0.85];
-    const knots = [[tw[0] - 330, 50], [tw[0], TH], [tw[1], TH], [anch, 88], [tw[2], TH], [tw[3], TH], [Math.min(L, tw[3] + 330), 60]];
+    const tEnd = Math.min(L, tw[3] + 330);
+    const knots = [[tw[0] - 330, measured ? Math.max(50, deckY(tw[0] - 330) + 4) : 50], [tw[0], TH], [tw[1], TH], [anch, anchTop],
+      [tw[2], TH], [tw[3], TH], [tEnd, measured ? Math.max(60, deckY(tEnd) + 4) : 60]];
     const cy = (t) => {
       for (let k = 0; k < knots.length - 1; k++) {
         const [t0, y0] = knots[k], [t1, y1] = knots[k + 1];
@@ -249,11 +274,11 @@ export function buildLandmarks(D, Q, { quality = 'high', uniforms } = {}) {
     };
     for (const sx of [-1, 1]) {
       const pts = [];
-      for (let t = knots[0][0]; t <= knots[knots.length - 1][0]; t += 15) pts.push(new THREE.Vector3(sx * 12, cy(t), t));
+      for (let t = knots[0][0]; t <= knots[knots.length - 1][0]; t += 15) pts.push(new THREE.Vector3(sx * cabX, measured ? Math.max(cy(t), deckY(t) + 3) : cy(t), t));
       cables.push(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 200, 0.45, 5, false));
       for (let t = knots[0][0] + 10; t < knots[knots.length - 1][0]; t += 16) {
         const y = cy(t), d = deckY(t);
-        if (y - d > 2) bayLights.push(box(0.2, y - d, 0.2, sx * 12, d, t));
+        if (y - d > 2) bayLights.push(box(0.2, y - d, 0.2, sx * cabX, d, t));
       }
     }
     addMesh(g, mergeAll(parts), steel);

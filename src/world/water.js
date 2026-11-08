@@ -91,7 +91,8 @@ export function createWaterMaterial(depthTex, rect, lake = false) {
   return new THREE.ShaderMaterial({ uniforms, vertexShader: VERT, fragmentShader: FRAG, fog: true });
 }
 
-export function buildWater(D, Q, { quality = 'high' } = {}) {
+/** `mergeLakes`: one mesh for all lakes (the v2 map has ~200; one draw call instead of one each). */
+export function buildWater(D, Q, { quality = 'high', mergeLakes = false } = {}) {
   const g = D.grid;
   // depth texture (0.1 m units, 0..25.5 m)
   const N = g.nx * g.nz;
@@ -118,14 +119,36 @@ export function buildWater(D, Q, { quality = 'high' } = {}) {
     uTime: mat.uniforms.uTime, uSunDir: mat.uniforms.uSunDir, uSunColor: mat.uniforms.uSunColor,
     uSky: mat.uniforms.uSky, uHorizon: mat.uniforms.uHorizon, uNight: mat.uniforms.uNight,
   });
+  const lakeGeos = [];
   for (const l of Q.lakes) {
     if (l.ring.length < 3) continue;
     const shape = new THREE.Shape(l.ring.map(([x, z]) => new THREE.Vector2(x, -z)));
     const geo = new THREE.ShapeGeometry(shape);
     geo.rotateX(-Math.PI / 2);   // (x, y=-z) -> (x, 0, z)
+    if (mergeLakes) { geo.translate(0, l.level, 0); lakeGeos.push(geo); continue; }
     const m = new THREE.Mesh(geo, lakeMat);
     m.position.y = l.level;
     group.add(m);
+  }
+  if (lakeGeos.length) {
+    let nv = 0, ni = 0;
+    for (const g of lakeGeos) { nv += g.attributes.position.count; ni += g.index.count; }
+    const pos = new Float32Array(nv * 3), nor = new Float32Array(nv * 3), uv = new Float32Array(nv * 2), idx = new Uint32Array(ni);
+    let vo = 0, io = 0;
+    for (const g of lakeGeos) {
+      pos.set(g.attributes.position.array, vo * 3); nor.set(g.attributes.normal.array, vo * 3); uv.set(g.attributes.uv.array, vo * 2);
+      const gi = g.index.array;
+      for (let i = 0; i < gi.length; i++) idx[io + i] = gi[i] + vo;
+      vo += g.attributes.position.count; io += gi.length;
+      g.dispose();
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    geo.setAttribute('normal', new THREE.BufferAttribute(nor, 3));
+    geo.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+    geo.setIndex(new THREE.BufferAttribute(idx, 1));
+    geo.computeBoundingSphere();
+    group.add(new THREE.Mesh(geo, lakeMat));
   }
   const tmpV = new THREE.Vector3();
   let sun = null, frameCount = 0;

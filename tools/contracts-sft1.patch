@@ -1,0 +1,74 @@
+diff --git a/CONTRACTS.md b/CONTRACTS.md
+index a1d61dc..901203f 100644
+--- a/CONTRACTS.md
++++ b/CONTRACTS.md
+@@ -44,10 +44,14 @@ the simplest reading, implement it, and document the choice at the top of your m
+ 
+ ## Coordinates and units (everyone)
+ 
+-- Meters, seconds, radians, Y up. Water level is `y = 0`.
+-- Geographic origin = Union Square, `LAT0 = 37.7880, LON0 = -122.4075`.
+-  `x = (lon - LON0) * 111320 * cos(LAT0 * PI/180)` (east is +x)
+-  `z = -(lat - LAT0) * 110540` (north is -z, south is +z)
++- Meters, seconds, radians, Y up. Sea water level is `y = 0`.
++- Heights: `y = NAVD88 (GEOID18) height - 0.969 m` (mean sea level at NOAA station 9414290,
++  epoch 1983-2001). The world manifest records it as `datum.y0_navd88`.
++- Geographic origin = Union Square, `LAT0 = 37.7880, LON0 = -122.4075`. Positions are a local
++  transverse Mercator on NAD83(2011) centred there
++  (`+proj=tmerc +lat_0=37.7880 +lon_0=-122.4075 +k_0=1 +x_0=0 +y_0=0 +ellps=GRS80 +units=m`):
++  x = easting (east is +x), z = -northing (north is -z, south is +z). Only the bake tools project;
++  if runtime code ever needs lat/lon, use `world.project(lat, lon, out)` / `world.unproject(x, z, out)`.
+ - **Heading** `h` is a rotation about +Y. A car with heading `h` faces world direction
+   `forward = (sin h, 0, cos h)`. So `object.rotation.y = h` points a model's local +Z
+   along forward. Heading 0 faces south (+z); heading PI faces north.
+@@ -67,17 +71,23 @@ export async function loadWorld(scene, { quality = 'high', onProgress } = {}) //
+ 
+ | member | meaning |
+ |---|---|
+-| `heightAt(x, z)` | terrain (ground) height, no buildings/bridges. Over water returns seabed (<0). |
+-| `surfaceHeight(x, z, yRef)` | highest drivable surface at (x,z) whose height is <= `yRef + 0.75`: terrain, bridge decks, flat building roofs. Physics uses this for ground contact so cars can land on rooftops and drive on the Golden Gate deck. |
++| `heightAt(x, z)` | bare-earth terrain height, no buildings, bridges or tunnels. Over water returns seabed (<0). NOT a valid floor inside tunnels: use `floorHeight`. |
++| `floorHeight(x, z)` | lowest drivable surface: equals `heightAt` everywhere except inside tunnels, where it is the tunnel floor. Use it for "never below the ground" clamps. |
++| `surfaceHeight(x, z, yRef)` | highest drivable surface at (x,z) whose height is <= `yRef + 0.75`: terrain, tunnel floors, any number of stacked bridge decks, viaducts and ramps, and flat building roofs. Inside a tunnel the hill above its roof is not a candidate. Physics uses this for ground contact so cars can land on rooftops and drive on either deck of the Bay Bridge. |
+ | `normalAt(x, z, yRef)` | unit THREE.Vector3 normal of that same surface (write into an optional 4th arg `out`). |
+-| `surfaceAt(x, z, yRef)` | `'road' | 'sidewalk' | 'grass' | 'sand' | 'roof' | 'bridge' | 'water'` |
++| `surfaceAt(x, z, yRef)` | `'road' | 'sidewalk' | 'grass' | 'sand' | 'roof' | 'bridge' | 'water' | 'brick' | 'dirt'`. A tunnel floor is `'road'`, a deck `'bridge'`. More values may be added: treat unknown strings like `'road'`. |
++| `groundHeight(x, z, yRef = 1e4)` | highest terrain, deck or tunnel floor <= `yRef + 0.75`, ignoring roofs (same tunnel rule). For AI and traffic. |
+ | `isWater(x, z)` | true when terrain at (x,z) is below water level and no deck covers it |
+-| `collideCircle(x, z, r, y, out)` | walls only. Tests a circle (car footprint radius r, car base at height y) against building footprints and solid landmark parts whose top is > `y + 0.75`. Returns `null` or `out` filled as `{ nx, nz, depth }` (push direction, unit, in XZ) for the deepest hit. Must be fast (spatial hash), called ~8x per car per frame. |
++| `collideCircle(x, z, r, y, out)` | walls only. Tests a circle (car footprint radius r, car base at height y) against building footprints, solid landmark parts, viaduct pillars, deck parapets, Jersey barriers and tunnel walls whose top is > `y + 0.75`. Returns `null` or `out` filled as `{ nx, nz, depth, top }` (push direction, unit, in XZ; `top` = top of the hit solid) for the deepest hit. Must be fast (spatial hash), called ~8x per car per frame. |
++| `ceilingHeight(x, z, y)` | optional: underside of the lowest deck soffit or tunnel roof above `y`, or `Infinity` in open air (cap hops and hover under decks). |
+ | `bounds` | `{ minX, maxX, minZ, maxZ }` playable area (physics clamps to it) |
+-| `roads` | `[{ points: [[x,z],...], width, type, name, oneway }]` simplified road centerlines (for minimap, traffic, AI) |
++| `roads` | `[{ points: [[x,z,y],...], width, type, name, oneway, level, struct? }]` simplified road centerlines with height (for minimap, traffic, AI); `level` is -1 tunnel, 0 ground, >= 1 on a structure |
++| `roadsNear(x, z, r, out)` | writes the indices of roads within `r` of (x,z) into the array `out` and returns the count. Allocation-free. |
+ | `roadGraph` | optional; `{ nodes:[[x,z]], edges:[[a,b,len]] }` |
+ | `tracks` | see below |
+-| `spawn` | `{ x, z, heading }` free-roam start on a road |
++| `spawn` | `{ x, z, y, heading }` free-roam start on a road |
++| `isLoaded(x, z)` | true where full-detail data is resident (see Streaming below) |
++| `ensure(region)` | `ensure({ x, z, r } \| { path, halfWidth })` -> `Promise<{ release() }>`: load full detail for a region before using it (race start, teleports, resets) |
+ | `landmarks` | `[{ id, name, x, z, radius, blurb }]` for free-roam discovery |
+ | `minimapImage` | optional `HTMLCanvasElement` top-down render of land/water/parks/roads covering `bounds` |
+ | `update(dt, camera, env)` | per-frame: water animation, chunk visibility/LOD. `env = { night: 0..1, time }` |
+@@ -88,11 +98,17 @@ Track object:
+ ```js
+ { id, name, area, description, laps,          // laps >= 1; laps === 1 && !loop -> point-to-point
+   loop: bool,                                  // true = circuit
+-  path: [[x,z], ...],                          // dense centerline (every ~8 m) along real streets
+-  checkpoints: [{ x, z, heading, width }],     // ordered gates ON the path, every ~150-250 m; last one = finish for point-to-point
+-  grid: [{ x, z, heading }] * 6,               // starting slots, 2 columns, on the road, facing along path
++  path: [[x,z,y], ...],                        // dense centerline (every ~8 m) along real streets, with road height
++  checkpoints: [{ x, z, y, heading, width }],  // ordered gates ON the path, every ~150-250 m; last one = finish for point-to-point
++  grid: [{ x, z, y, heading }] * 6,            // starting slots, 2 columns, on the road, facing along path
+   lengthMeters, difficulty: 1..5 }
+ ```
++**Streaming.** The world loads in 512 m tiles as the camera moves. All World queries stay
++synchronous and allocation-free, and never throw or return NaN inside `bounds`. Within 1 km of the
++camera and along every shipped track corridor (pinned when `loadWorld` resolves) they are full
++detail. Elsewhere heights are coarse (8-16 m) and `collideCircle` uses simplified footprints, but
++bridges, viaducts and tunnels are always exact. `isLoaded(x, z)` says which.
++
+ Required tracks (use real street routing via the OSM road graph): Embarcadero Sprint
+ (Fisherman's Wharf -> Embarcadero -> Ferry Building -> Oracle Park), Lombard Zigzag
+ (Russian Hill circuit incl. the crooked block of Lombard St and Hyde St), Golden Gate Run

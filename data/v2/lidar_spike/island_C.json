@@ -1,0 +1,192 @@
+{
+ "version": 1,
+ "attribution": "Ground and roads: USGS 3DEP lidar CA_SanFrancisco_1_B23 (public domain); road centrelines (c) OpenStreetMap contributors (ODbL)",
+ "bbox": {
+  "x0": -512.0,
+  "z0": -1024.0,
+  "x1": 1024.0,
+  "z1": 0.0
+ },
+ "feather": 24.0,
+ "grid": {
+  "x0": -512.0,
+  "z0": -1024.0,
+  "cell": 2.0,
+  "nx": 769,
+  "nz": 513,
+  "hBase": -4.0
+ },
+ "knots": 7,
+ "bevel": 0.25,
+ "world": {
+  "roads": 45561,
+  "buildings": 5564,
+  "roadsHash": 8247271
+ },
+ "counts": {
+  "stations": 19613,
+  "runs": 577
+ },
+ "arrays": {
+  "grid": {
+   "offset": 0,
+   "length": 394497,
+   "type": "uint16"
+  },
+  "st_xz": {
+   "offset": 788996,
+   "length": 39226,
+   "type": "float32"
+  },
+  "st_off": {
+   "offset": 945900,
+   "length": 137291,
+   "type": "int16"
+  },
+  "st_h": {
+   "offset": 1220484,
+   "length": 137291,
+   "type": "uint16"
+  },
+  "st_jd": {
+   "offset": 1495068,
+   "length": 19613,
+   "type": "int16"
+  },
+  "run_start": {
+   "offset": 1534296,
+   "length": 577,
+   "type": "uint32"
+  },
+  "run_count": {
+   "offset": 1536604,
+   "length": 577,
+   "type": "uint32"
+  },
+  "run_road": {
+   "offset": 1538912,
+   "length": 577,
+   "type": "uint32"
+  },
+  "run_flags": {
+   "offset": 1541220,
+   "length": 577,
+   "type": "uint8"
+  }
+ },
+ "stats": {
+  "bbox": [
+   -512.0,
+   -1024.0,
+   1024.0,
+   0.0
+  ],
+  "lidar": {
+   "project": "CA_SanFrancisco_1_B23",
+   "source": "lidar_tiles/r025 (int16 cm)",
+   "datum": "NAVD88 - 0.969",
+   "ground_cells_frac": 0.438,
+   "buildings_masked": 1742,
+   "ground_cells_in_footprints_dropped_frac": 0.04
+  },
+  "grid": {
+   "nx": 769,
+   "nz": 513,
+   "cell": 2.0,
+   "nodes": 394497,
+   "nodes_without_ground_frac": 0.502,
+   "fill_s": 9.5,
+   "nodes_from_old_terrain_frac": 0.0,
+   "lidar_minus_old_terrain_m": {
+    "mean": 0.03,
+    "rms": 0.52,
+    "p95_abs": 1.05
+   },
+   "nodes_under_ribbons_frac": 0.311
+  },
+  "ribbons": {
+   "measure_s": 8.9,
+   "curb_windows": 15075,
+   "curb_windows_within_2cm_frac": 0.94,
+   "curb_window_dev_m_p50_p90_abs": [
+    0.002,
+    0.015
+   ],
+   "stations_dropped_under_upper_level": 1,
+   "stations_dropped_frac": 0.0001,
+   "runs": 577,
+   "roads": 577,
+   "km": 37.1,
+   "stations": 19613,
+   "road_sides": 1154,
+   "sides_curb_measured": 675,
+   "sides_curb_default": 219,
+   "sides_no_curb": 260,
+   "curb_rise_m_p10_p50_p90": [
+    0.094,
+    0.133,
+    0.168
+   ],
+   "crown_m_p10_p50_p90": [
+    0.033,
+    0.117,
+    0.226
+   ],
+   "gutter_to_gutter_m_p10_p50_p90": [
+    5.5,
+    10.6,
+    15.0
+   ],
+   "junctions": 378,
+   "junction_radius_m_p50_p90": [
+    7.6,
+    10.4
+   ]
+  },
+  "bake_s": 26.4,
+  "size": {
+   "area_km2": 1.573,
+   "bin_raw": 1541797,
+   "bin_gzip": 906334,
+   "sections": {
+    "grid": {
+     "raw": 788994,
+     "gzip": 528581
+    },
+    "st_xz": {
+     "raw": 156904,
+     "gzip": 142784
+    },
+    "st_off": {
+     "raw": 274582,
+     "gzip": 41836
+    },
+    "st_h": {
+     "raw": 274582,
+     "gzip": 174337
+    },
+    "st_jd": {
+     "raw": 39226,
+     "gzip": 14107
+    },
+    "run_start": {
+     "raw": 2308,
+     "gzip": 1005
+    },
+    "run_count": {
+     "raw": 2308,
+     "gzip": 756
+    },
+    "run_road": {
+     "raw": 2308,
+     "gzip": 1061
+    },
+    "run_flags": {
+     "raw": 577,
+     "gzip": 224
+    }
+   },
+   "gzip_per_km2": 576232
+  }
+ }
+}

@@ -63,14 +63,16 @@ diffuseColor.rgb *= 1.0 - facWin * uNight * 0.6;`);
 /**
  * Build building chunk meshes. D = decoded data, Q = queries.
  * Returns { group, update(camera), material, stats }.
+ * `material` / `facadeTex` reuse a shared material (the v2 world builds one set per tile);
+ * `chunk` is the chunk size in metres.
  */
-export function buildBuildings(D, Q, { quality = 'high', uniforms, extraSkip } = {}) {
+export function buildBuildings(D, Q, { quality = 'high', uniforms, extraSkip, material: sharedMaterial, facadeTex: sharedTex, chunk = CHUNK } = {}) {
   const B = D.B;
-  const facadeTex = createFacadeTexture(quality === 'low' ? 128 : 256);
-  const material = createBuildingMaterial(facadeTex, uniforms);
+  const facadeTex = sharedMaterial ? sharedTex || null : createFacadeTexture(quality === 'low' ? 128 : 256);
+  const material = sharedMaterial || createBuildingMaterial(facadeTex, uniforms);
   const g = D.grid;
   const CX0 = g.x0, CZ0 = g.z0;
-  const NCX = Math.ceil((g.nx * g.cell) / CHUNK), NCZ = Math.ceil((g.nz * g.cell) / CHUNK);
+  const NCX = Math.ceil((g.nx * g.cell) / chunk), NCZ = Math.ceil((g.nz * g.cell) / chunk);
 
   // classify + chunk assignment
   const isSmall = new Uint8Array(B.count);
@@ -90,8 +92,8 @@ export function buildBuildings(D, Q, { quality = 'high', uniforms, extraSkip } =
     isSmall[k] = a < 230 && h < 15 ? 1 : 0;
     if (quality === 'low' && (a < 160 && h < 12)) continue;
     if (extraSkip && extraSkip(cx, cz)) continue;
-    const ci = Math.min(NCX - 1, Math.max(0, Math.floor((cx - CX0) / CHUNK)));
-    const cj = Math.min(NCZ - 1, Math.max(0, Math.floor((cz - CZ0) / CHUNK)));
+    const ci = Math.min(NCX - 1, Math.max(0, Math.floor((cx - CX0) / chunk)));
+    const cj = Math.min(NCZ - 1, Math.max(0, Math.floor((cz - CZ0) / chunk)));
     chunkOf[k] = cj * NCX + ci;
     keep[k] = 1; kept++;
   }
@@ -125,7 +127,10 @@ export function buildBuildings(D, Q, { quality = 'high', uniforms, extraSkip } =
     for (const k of list) {
       const s = B.start[k], n = B.n[k];
       const st = B.style[k];
-      const P = STYLE_PARAMS[st];
+      // a style past the facade styles (8, the v2 bake's towers and bridge pylons): walls without
+      // windows, shaded like roofs
+      const plain = st >= STYLE_PARAMS.length;
+      const P = STYLE_PARAMS[plain ? 0 : st];
       const top = B.top[k], gmin = B.gmin[k], base = gmin - 3;
       const Heff = Math.max(2.5, top - gmin);
       const nf = Math.max(1, Math.round(Heff / P.floor));
@@ -148,7 +153,7 @@ export function buildBuildings(D, Q, { quality = 'high', uniforms, extraSkip } =
           nor[o * 3] = nx * 127; nor[o * 3 + 1] = 0; nor[o * 3 + 2] = nz * 127;
           col[o * 3] = wr; col[o * 3 + 1] = wg; col[o * 3 + 2] = wb;
           fuv[o * 2] = quad[q][3]; fuv[o * 2 + 1] = quad[q][4];
-          finfo[o * 4] = st; finfo[o * 4 + 1] = seed; finfo[o * 4 + 2] = Math.min(255, nf); finfo[o * 4 + 3] = 0;
+          finfo[o * 4] = plain ? 254 : st; finfo[o * 4 + 1] = seed; finfo[o * 4 + 2] = Math.min(255, nf); finfo[o * 4 + 3] = 0;
         }
         idx[ii++] = v; idx[ii++] = v + 2; idx[ii++] = v + 1;
         idx[ii++] = v; idx[ii++] = v + 3; idx[ii++] = v + 2;

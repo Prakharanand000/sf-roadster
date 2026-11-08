@@ -1,0 +1,28 @@
+{
+ "mosaic4_minus_lidar4": {
+  "n": 104366,
+  "median": 0.001,
+  "mad": 0.022,
+  "p5": -0.13,
+  "p95": 0.104,
+  "within_15cm": 0.922,
+  "within_50cm": 0.98
+ },
+ "dem1m_minus_lidar1": {
+  "n": 1663888,
+  "median": -0.001,
+  "mad": 0.003,
+  "p5": -0.022,
+  "p95": 0.027,
+  "within_15cm": 0.986,
+  "within_50cm": 0.997
+ },
+ "position": {
+  "steep_cells": 115931,
+  "rms_at_zero": 0.94,
+  "best_shift_x_m": 0.0,
+  "best_shift_z_m": 0.0,
+  "rms_at_best": 0.94,
+  "note": "best shift: lidar raster sampled at x + dx, z + dz matches the DEM best"
+ }
+}
